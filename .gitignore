@@ -132,3 +132,12 @@ dmypy.json
 *.log
 *.dvi
 *.aux
+*.bbl
+*.bcf
+*.blg
+*.run.*
+*.fls
+*.fdb_latexmk
+*.fdb
+*.docx
+*.doc
