@@ -10,19 +10,24 @@
 \addbibresource{thesis.bib}
 
 \usepackage{graphicx}
+\usepackage{subcaption}
 \graphicspath{{./assets/}}
 
-\title{Memo 2/thesis draft}
+\title{Thesis draft}
 \author{Joshua Megnauth}
 \date{\today}
 
 \begin{document}
+\maketitle
+
 \section{Introduction: Reddit, gamers, and social networks}
 Gaming is an omnipresent artistic medium enjoyed by a plurality of Americans. Research from the \textit{Entertainment Software Association} (E.S.A.) has found that about 65\% of American adults play video games. About 46\% of said gamers are female (\cite{esagamers}). The E.S.A.'s research counters the tired trope of gamers as young, immature boys. Despite the prevalence and diversity of gamers academia is woefully behind on ludology, the study of gaming. Gaming lacks the prestige of other artistic entertainment media such as books, music, and film. An interested party may find texts on the innovations of Allen Ginsberg's poem \textit{Howl} or Sonic Youth's \textit{Daydream Nation} while scarcely finding an academic article on the contributions of the video game \textit{Doom}. 
 
 Ludology is as exciting as fields such as A.I. despite lacking the selfsame effervescence. In other words, ludology may be studied from many different angles. Political sociologists would find much to mine from the philosophical schisms in the gaming community. Recent grassroots movements to push for more representation in video games spawned a revanchist and sexist counter movement. Besides the political, sociologists may write ethnographies of the online communities or interactions that occur within gaming. Mark Chen's \textit{Leet Noob: The Life and Death of an Expert Player Group in 'World of Warcraft'} is a study of a group of gamers who tackle dungeons in \textit{World of Warcraft}. Chen writes from the perspective of both a gamer and a social scientist to apply theories such as social and cultural capital, actor-network theory, social construction, et cetera to the video game (\cite{chenwow}). The list above is clearly not exhaustive. However, I'd like to mention, as an aside, that online communities are transient; ignoring ludology risks permanently missing out on an aspect of culture.
 
 My thesis focusses on the intersection between network science via the social network Reddit and video games. I am particularly interested in the distribution of gamers across subreddits. Reddit and the related terminology will be explained below. I hypothesize that gamers are more likely to post on gaming subreddits (that is, more likely to have a community that spans across subreddits). Analyzing the network dispersion of gamers is useful for both the social sciences as well as marketing. Gamers may preferentially attach to other gamers or to other ostensibly related subjects such as anime or eSports. Either conclusion---the gamers preferentially attach or not---is end useful for ludology. 
+
+My guiding principle is thus to use my statistical and computing skill coupled with my domain knowledge of video games in order to contribute to ludology. Previous studies on gaming lack domain expertise while exhibiting logical fallacies---both of which seem to be caused by the hermetic world of academia. More proper ludology needs to seed the field until the study of video games resembles writing on music or films. 
 
 An anecdote engendered my thesis. I've observed; anecdotally, like many others; that nerds of a feather tend to flock together. Gamers tend to share a sample from a common set of interests such as anime, wrestling, technology, certain tastes in music, et cetera. This observation is far from holistic---meaning, gamers do not adopt all of the same traits, and clearly not every person who watches wrestling is a gamer. However, the basic observation led to my thesis. My research is not seeking to answer that question specifically, but evidence will be provided toward answering that question through my research.
 
@@ -34,20 +39,28 @@ My goal is to contribute to both ludology as well as studies of Reddit. Gaming b
 \subsection{Why video games?}
 Gamers and ludology, as discussed earlier, are legitimate areas of study that are largely ignored by academia as well as having an image problem regardless of gaming's prevalence. Gaming as a medium is sometimes strangely maligned as coercing individuals toward violence. In 2019, President Donald Trump as well as Kevin McCarthy and Dan Patrick, both Republican politicians, scapegoated video games as reported by an article in the New York \textit{Times}. The article explains that games are often blamed for shootings despite the lack of causal evidence. The American Psychological Association, according to the \textit{Times}, is that video games and violence are not linked. Dr. Chris Ferguson of the A.P.A. humorously mentioned that the data linking bananas to suicide are about the same as those data connecting video games and other media to violence (\cite{drapernyt0819}).
 
-
-Most research published on gaming is cursory while also lacking domain knowledge on the subject. A search through databases that compile articles, such as JSTOR, on video games shows that research is decidedly lacking in imagination as they mostly focus on the antiquated violence question. One such article published in \textit{Frontiers of Psychology} exhibits a very flawed methodology in studying gamers. The researchers use an imbalanced and relatively small random sample that skews young and male. Females consisted of a scant 15\% of their sample. The writers justified the skewed sample by reference a two decade old paper despite publishing their article in 2019 and using recent sources otherwise (\cite{badresearch}). Research from the NPD Group corroborates what the E.S.A. found and gamers already know: about half of gamers are women and more females own the 3DS, Wii U, and Nintendo Switch than males (\cite{npdgamers}).
-
-My guiding principle is thus to use my statistical and computing skill coupled with my domain knowledge of video games in order to contribute to ludology. Previous studies on gaming lack domain expertise while exhibiting logical fallacies---both of which seem to be caused by the hermetic world of academia. More proper ludology needs to seed the field
+Most research published on gaming is cursory while also lacking domain knowledge on the subject. A search through databases that compile articles, such as JSTOR, on video games shows that research is decidedly lacking in imagination as they mostly focus on the antiquated violence question. One such article published in \textit{Frontiers of Psychology} exhibits a very flawed methodology in studying gamers. The researchers use an imbalanced and relatively small random sample that skews young and male. Females consisted of a scant 15\% of their sample. The writers justified the skewed sample by referencing a two decade old paper despite publishing their article in 2019 and using recent sources otherwise (\cite{badresearch}). Research from the NPD Group corroborates what the E.S.A. found and gamers already know: about half of gamers are women and more females own the 3DS, Wii U, and Nintendo Switch than males (\cite{npdgamers}). Beyond the poor sampling the research heavily relies on p-values without associated effect sizes. Furthermore, the basis for the study is intrinsically flawed. Gamers are a wide social unit. We would not sample around 3000 music buffs in order to see if "problematic music listening" is associated with "poor psychological functioning."
 
 \subsection{What is Reddit?}
+Reddit is a social network reminiscent of the forums and bulletin board systems (B.B.S.) of the past. Reddit is designed for lengthy deliberation, or at least facilitates it, which is like forums and unlike Twitter or Facebook. Subreddits is Reddit parlance for a community which is similar to a forum. Pseudonymous users may post or reply to discussion topics. Individual subreddits are moderated by screened volunteers from the community; rules are enforced and users may not be able to post if their reputation---known as karma---is too low. Needless to say, Reddit's structure engenders higher quality content---generally speaking at least as Reddit is also home to lengthier discussions on puerile matters. Reddit users are known by the demonym Redditors.
 
-To do
+Reddit reflects gaming's preeminence via \textit{many} the many subreddits on the topic; individual consoles, series, genres, abstruse memes, as well as technological concepts such as emulation all have incredibly active subs.
+
 
 \subsection{Weak ties in social networks}
 To do\cite{granovetter1973}
 
+\subsection{Co-posting networks via Reddit}
+To do \cite{}
 
 \section{Methodology}
+
+\begin{figure}[h!]
+  \includegraphics[width=\linewidth]{scraper_at_work.png}
+  \caption{Scraper hard at work}
+  \label{fig:workingscraper}
+\end{figure}
+Network analysis is a big data enterprise.
 
 \printbibliography
 
