@@ -48,6 +48,8 @@ Reddit reflects gaming's preeminence via \textit{many} the many subreddits on th
 
 Redditors may post on as many or as little subreddits as they wish. For example, a user may post on the subreddits for PlayStation 4, P.C. gaming, Linux, and the systems programming language, Rust. Another user may frequent the subs for K-Pop, anime, and the Nintendo Switch.
 
+\subsection{Big data---Volume, Variety, and Velocity}
+
 \subsection{Weak ties in social networks}
 To do\cite{granovetter1973}
 
@@ -61,7 +63,25 @@ To do \cite{}
   \caption{Scraper hard at work}
   \label{fig:workingscraper}
 \end{figure}
-Network analysis is a big data enterprise.
+
+My research project requires relatively recent data as well as observations relevant to video games. Researchers in the computational social sciences seem to trend toward gathering their own data. The internet is a dynamic space of constant data production. Structured data may be limited or flawed for many topics, including ludology. Scraping data allows computational social scientists to gather raw, unpasteurized data rather than relying on old, static sources. A survey, for example, is saliently flawed for gamers because conducting one properly would likely require a large sample across a wide span of ages as well as capture gamers who play on different platforms. Scraping data seems both more reliable as well as more direct in a case like that as well as for my project.
+
+While large Reddit data sets exist via the \textit{Stanford Network Analysis Project} as well as \textit{Kaggle}, scraping data from Reddit is not too difficult due to the open Reddit API \cite{redditapi}. Bindings for Python exist via \textit{PRAW} as well. However, the Reddit API imposes several restrictions and requires an account to use properly as well. The restrictions are reasonable due to Reddit's high traffic: rapacious scrapers may hammer the site and associated Content Delivery Networks. Caching services, such as the open source Pushshift, aims to alleviate the stress caused by scrapers as well as provide a more convenient API \cite{pushshiftapi}. I opted for Pushshift to gather my data due to its flexibility.
+
+My scraper gathers \textit{N} Node-Edge pairs from a provided list of subreddits. I wrote the scraper in the systems programming language, Rust, and the source code is available on GitHub\footnote{https://github.com/joshuamegnauth54/thesis\_gamer\_scraper}. My program's high level logic is as follows: 
+
+\begin{enumerate}
+  \item Collect 100 nodes with associated metadata from a subreddit. Each observation contains the Redditor name, epoch timestamps, and subreddit name.
+  \item Paginate by setting the \textit{before} API parameter to the earliest timestamp from the recent scrape of 100 nodes.
+  \item Add each gathered node to a hash set which precludes duplicate observations.
+  \item Repeat steps one through three for the set of subreddits in a round robin manner.
+  \item Repeat steps one through four until \textit{N} is reached.
+  \item Remove deleted users and automoderator replies.
+  \item Hash all of the Redditor names with SHA256 at an attempt at privacy\footnote{Very little of the data sets found online actually hashed the user names as the information is all public. However, hashing at least adds a minimum layer of privacy.}.
+  \item Save everything to a CSV.
+\end{enumerate}
+
+My data set\footnote{Available here: https://github.com/joshuamegnauth54/GamerDistributionThesis2020/data} contains about 78,000 observations gathered via the logic above.
 
 \printbibliography
 
