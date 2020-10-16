@@ -42,7 +42,7 @@ Gamers and ludology, as discussed earlier, are legitimate areas of study that ar
 Most research published on gaming is cursory while also lacking domain knowledge on the subject. A search through databases that compile articles, such as JSTOR, on video games shows that research is decidedly lacking in imagination as they mostly focus on the antiquated violence question. One such article published in \textit{Frontiers of Psychology} exhibits a very flawed methodology in studying gamers. The researchers use an imbalanced and relatively small random sample that skews young and male. Females consisted of a scant 15\% of their sample. The writers justified the skewed sample by referencing a two decade old paper despite publishing their article in 2019 and using recent sources otherwise (\cite{badresearch}). Research from the NPD Group corroborates what the E.S.A. found and gamers already know: about half of gamers are women and more females own the 3DS, Wii U, and Nintendo Switch than males (\cite{npdgamers}). Beyond the poor sampling the research heavily relies on p-values without associated effect sizes. Furthermore, the basis for the study is intrinsically flawed. Gamers are a wide social unit. We would not sample around 3000 music buffs in order to see if "problematic music listening" is associated with "poor psychological functioning."
 
 \subsection{What is Reddit?}
-\begin{figure}[h!]
+\begin{figure}[ht!]
   \centering
   \begin{subfigure}[b]{0.4\linewidth}
     \includegraphics[width=\linewidth]{reddit_rust_comments.png}
@@ -99,13 +99,30 @@ While studies of Reddit are rather rare, researchers tend to be inclined towards
 
 Troy Steinbauer's 2010 paper on Reddit co-posting networks is one of the earliest studies of the social network. Steinbauer gathered submissions and comments from the top 1\% of subreddits at the time as well as general data on Reddit. The average subscriber count for subs total at the time of his analysis was about 1077 with a +1 standard deviation of 23514---extremely wide as well as skewed. His research analyzed related subreddits, comment trees, and friend graphs. 2010 is ancient in terms of computational social science, but Steinbauer's methods are still useful for my study (\cite{tbower_2011}).
 
+\begin{figure}[ht!]
+  \centering
+  \begin{subfigure}[b]{0.4\linewidth}
+    \includegraphics[width=\linewidth]{related_pcgaming.png}
+    \caption{Related subs /r/pcgaming}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.4\linewidth}
+    \includegraphics[width=\linewidth]{related_ps4.png}
+    \caption{Related subs /r/PS4}
+  \end{subfigure}
+\end{figure}
+
 Subreddits may link to other "related" subs as decided by the owners. A related sub is whatever the owners decide. For example, a subreddit on a game series may link the individual subs for each game as well as related series. Steinbauer created a graph where each node is a sub and each edge is a "related" connection between two subs. Subreddits tend to have less than fifteen related links besides a few special subs. The related subs graph is also not very well connected. The largest connected component (LCC) of the graph only contains about 25\% of the nodes while the average clustering coefficient is low at 0.039 (\cite{tbower_2011}). 
 
+Steinbauer's comment tree graph is far more connected than than his related subs network. The basis of the network is a set of thresholds for comments. Steinbauer defines a loose graph as having an undirected edge between two posters, A and B, if A or B responded to the other. A tight graph requires both posters having responded to each other. Finally, a strict graph is like a tight graph except with a threshold of four comment pairs between respondents. The final graph is remarkably connected in terms of LCC as the largest component of the loose and tight graphs contain over 98\% of the nodes while the strict graph contains about half of the nodes in the LCC (\cite{tbower_2011}).
+
+Graham Earley, Nikita Fomichev, Willa Langworthy, and Ruyi Shen studied the Bernie Sanders and Donald Trump subreddits in 2017. Their paper is a very mature approach to network science as the researchers use natural language processing (NLP) for some of their node attributes. Earley et alia define nodes as posts to submissions. Particularly, they calculate average sentiment scores per post. The median length of posts is longer on the Sanders sub in comparison to the Trump sub. Posts on the Sanders sub tend to be longer for all three sentiment categories studied as well---positive, neutral, and negative. Positive posts on the Sanders sub sport an average length of 540.2 compared to 35.36 on the Trump sub. Neutral posts tended to be short on both subreddits (\cite{causeweb2017}).
+
+Next, Earley et alia calculate network statistics for the two graphs. The Sanders subreddit is much more clustered than the Trump sub at .897 versus .497 for transitivity respectfully. Modularity is also higher for Sanders' sub at .707 in comparison to .505 for Trump. Both of these imply greater connectivity for posters on the Sanders sub as they're responding to each other more across submissions. \footnote{Reddit recently banned \textbf{/r/the\_donald} due to users spearheading attacks on other communities. The community's notoriety spans beyond coordinated trolling. The sub bred conspiracies and racist memes. The posters eventually fled to an echo chamber and "alternative" Reddit that respects their first amendment rights. Note that Reddit isn't a governmental organization that can violate the freedom of speech (\cite{thedonaldban2020}). I assume that the relatively disconnected nature of the sub shown in the paper may be due to the sub lacking the cohesiveness of an actual community. The Donald is more of an ideology, like \textit{juche sasang}, which in turn means the sub is closer the puerile subs noted earlier.}
 
 
 \section{Methodology}
 
-\begin{figure}[h!]
+\begin{figure}[ht!]
   \includegraphics[width=\linewidth]{scraper_at_work.png}
   \caption{Scraper hard at work}
   \label{fig:workingscraper}
@@ -128,7 +145,7 @@ My scraper gathers \textit{N} Node-Edge pairs from a provided list of subreddits
   \item Deserialize everything to a CSV.
 \end{enumerate}
 
-My data set\footnote{Available here: https://github.com/joshuamegnauth54/GamerDistributionThesis2020/data} contains about 127,000 observations gathered via the logic above.
+My data set\footnote{Available here: https://github.com/joshuamegnauth54/GamerDistributionThesis2020/data} contains about 127,000 observations gathered via the logic above. The first and most salient limitation here is that I only gathered 127K observations for a select set of subreddits. I originally intended to perform a breadth first search by scraping outwards from the nodes. So in that case each node in the set of unique nodes would be individually queried for the list of subreddits they posted to at least \textit{N} times. Ironically, Pushshift lacks an easy access point (as far as I know) for gathering that data. My program contains the requisite logic to scrape that data from Reddit without using their API\footnote{See: https://github.com/joshuamegnauth54/thesis\_gamer\_scraper/blob/master/src/scraperclient/scraperclient.rs The scrape\_individ\_users function implements the logic.}, but Reddit bans users who are caught scraping data outside of their public API.
 
 \printbibliography
 
