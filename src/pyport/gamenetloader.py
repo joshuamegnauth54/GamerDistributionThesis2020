@@ -39,7 +39,8 @@ def load_network(path, n_degree=DEFAULT_N_DEGREE):
                 "rpg", "truegaming", "ShouldIbuythisgame", "FreeGamesOnSteam",
                 "IndieGaming"]
 
-    gamers.loc[gamers.subreddit.isin(game_subs), "SysGamGen"] = "Games"
+    # VGames avoids clashes with Games
+    gamers.loc[gamers.subreddit.isin(game_subs), "SysGamGen"] = "VGames"
     gamers.loc[gamers.subreddit.isin(sys_subs), "SysGamGen"] = "Systems"
     gamers.loc[gamers.subreddit.isin(gen_subs), "SysGamGen"] = "General"
     # Colors for SysGamGem
@@ -83,7 +84,7 @@ def load_network(path, n_degree=DEFAULT_N_DEGREE):
     return gamers
 
 
-def load(path = None):
+def load(path=None):
     """Loads gamer network from path if specified or tries alt paths.
 
     Parameters
@@ -113,6 +114,8 @@ def measures(gamers_nx):
     # Average Shortest Path
     # Radius, Periphery
     #. Center
-    # Connected components
+    # components = sorted(nx.connected_components(projection), key=len, reverse=True)
+    # list(map(len, comps[:10]))
     # nx.node_connectivity
     # nx.minimum_node_cut
+    # max_cliq = nx.make_max_clique_graph(gamers_nx)
