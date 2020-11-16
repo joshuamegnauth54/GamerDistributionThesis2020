@@ -5,12 +5,19 @@ import subcolors
 
 
 def parse_auth_attr(gamers_df, node, attr):
-    most_posted = gamers_df\
-                            .loc[gamers_df.author == node, attr]\
-                            .value_counts()\
-                            .idxmax()
 
-    return subcolors.subreddit_colors([most_posted])
+    # Some attributes preclude some subreddits entirely. Thus, I must check
+    # for a ValueError here.
+    try:
+        most_posted = gamers_df\
+                                .loc[gamers_df.author == node, attr]\
+                                .value_counts()\
+                                .idxmax()
+    except ValueError:
+        # print("DEBUG: node: {} and attr: {}".format(node, attr))
+        most_posted = None
+    finally:
+        return subcolors.subreddit_colors([most_posted])
 
 
 def parse_edge_attr(gamers_df, first, second, attr):
@@ -42,31 +49,36 @@ def parse_edge_attr(gamers_df, first, second, attr):
 
     # The intersection may be one or multiple subs.
     # Subcolors handles both situations.
-    intersects = first_subs.intersection(second_attrs)
-    # print("({}) ∩ ({}) = {}".format(first, second, intersects))
+    intersects = first_attrs.intersection(second_attrs)
+    # print(DEBUG: "({}) ∩ ({}) = {}".format(first, second, intersects))
 
     return subcolors.subreddit_colors(intersects)
 
 
-def author_edge_colors(G, gamers_df):
+def add_attributes(G, gamers_df):
 
     # This looks a bit messy but essentially it's:
     # {(edge): {"color": color}}
     # generated in a dictionary comprehension.
     nx.set_edge_attributes(G,
                            {(first, second):
-                            {"sub_color": parse_author_edges(gamers_df,
-                                                             first,
-                                                             second,
-                                                             "subreddit")}
+                            {"sub_color": parse_edge_attr(gamers_df,
+                                                          first,
+                                                          second,
+                                                          "subreddit"),
+                             "SysGamGen": parse_edge_attr(gamers_df,
+                                                          first,
+                                                          second,
+                                                          "SysGamGen")}
                             for first, second in G.edges()
                             })
 
+    # Likewise as above but for nodes
     nx.set_node_attributes(G,
                            {node:
-                            {"max_sub_col": parse_auth_attr(gamers_df,
-                                                            node,
-                                                            "subreddit"),
+                            {"sub_color": parse_auth_attr(gamers_df,
+                                                          node,
+                                                          "subreddit"),
                              "SysGamGen": parse_auth_attr(gamers_df,
                                                           node,
                                                           "SysGamGen"),

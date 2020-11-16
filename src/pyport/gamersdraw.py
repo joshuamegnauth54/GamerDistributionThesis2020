@@ -1,14 +1,26 @@
 import networkx as nx
+import matplotlib.pyplot as plt
 
-def draw_gamers(gamers, algo="sfdp"):
+def draw_gamers(gamers, algo="sfdp", color="sub_color", edge_color="#282a36",
+                size=32):
     pos = nx.nx_pydot.graphviz_layout(gamers, prog=algo)
-    nx.draw_networkx(gamers, pos, node_size=25, width=.25,
-                     node_color=list(nx.get_node_attributes(gamers, "max_sub_col").values()),
-                     with_labels=False)
+    fig, ax = plt.subplots(figsize=(16, 16))
+    nx.draw_networkx(gamers,
+                     pos,
+                     with_labels=False,
+                     ax=ax,
+                     node_size=size,
+                     node_color=list(nx.get_node_attributes(gamers, color).values()),
+                    # alpha=0.75,
+                     edge_color=list(nx.get_node_attributes(gamers, edge_color).values()),
+                     label=color
+                     )
+    fig.tight_layout()
+    fig.patch.set_facecolor("#282a36")
+    ax.patch.set_facecolor("#282a36")
+    return (fig, ax)
 
-
-def random_test():
-    G = nx.algorithms.bipartite.generators.gnmk_random_graph(100, 10, 125)
-    nx.set_edge_attributes(G, "#FFB6C1", "color")
-
-    nx.draw(G, nx.nx_pydot.graphviz_layout(G, "sfdp"), edge_color=nx.get_edge_attributes(G, "color").values())
+def draw_degree_centrality(gamers):
+    deg_cent = [dc * 10000 for dc in nx.degree_centrality(gamers).values()]
+    return draw_gamers(gamers, color="SysGamGen", edge_color="sub_color",
+                       size=deg_cent)

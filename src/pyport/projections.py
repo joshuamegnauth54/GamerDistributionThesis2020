@@ -1,7 +1,7 @@
 import networkx as nx
 import pandas as pd
 
-from gamenetattrs import author_edge_colors
+from gamenetattrs import add_attributes
 
 def project_gamers(gamers_df, top, bottom):
     """Projects top onto bottom for gamers_df.
@@ -23,7 +23,7 @@ def project_gamers(gamers_df, top, bottom):
     assert(nx.bipartite.is_bipartite(G))
     Bnodes = set(gamers_df[bottom].values)
     projection = nx.bipartite.weighted_projected_graph(G, Bnodes)
-    author_edge_colors(projection, gamers_df)
+    add_attributes(projection, gamers_df)
     return projection
 
 
@@ -45,3 +45,5 @@ def project_auth_tops_bauth(gamers_df: pd.DataFrame):
     """Builds a bipartite network of Redditor->Topics with Redditors as the
     bottom nodes."""
     projection = project_gamers(gamers_df, "permalink", "author")
+
+    return projection

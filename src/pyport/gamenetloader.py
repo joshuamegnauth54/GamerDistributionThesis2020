@@ -73,7 +73,7 @@ def load_network(path, n_degree=DEFAULT_N_DEGREE):
     multi_subs = ["DarkSouls2", "darksouls", "MonsterHunter", "Fallout",
                   "DestinyTheGame", "skyrim", "metalgearsolid", "witcher",
                   "PUBATTLEGROUNDS", "SEGA", "rocketleague", "FallGuysGame",
-                  "StardewValley"]
+                  "StardewValley", "otomegames"]
 
     gamers.loc[gamers.subreddit.isin(sony_subs), "Systems"] = "Sony"
     gamers.loc[gamers.subreddit.isin(xbox_subs), "Systems"] = "Xbox"
@@ -108,7 +108,8 @@ def load(path=None):
         return load_network(path)
 
 def measures(gamers_nx):
-    # nx.bipartite.clustering(gamersnx, Rnodes)
+    pass
+    # nx.clustering(projection, weight="weight")
     # nx.average_clustering(gamers_nx, weight="weight")
     # Diameter
     # Average Shortest Path
@@ -119,3 +120,13 @@ def measures(gamers_nx):
     # nx.node_connectivity
     # nx.minimum_node_cut
     # max_cliq = nx.make_max_clique_graph(gamers_nx)
+    # nx.degree_assortativity_coefficient(projection, weight="weight")
+    # nx.attribute_assortativity_coefficient(projection, "SysGamGen")
+    # nx.smallworld.sigma(projection)
+    # Closeness vitality
+    # nx.degree_assortativity_coefficient(projection, weight="weight")
+    # nx.harmonic_centrality(projection)
+    # nx.current_flow_closeness_centrality(projection_lcc, weight="weight", solver="full")
+    # nx.effective_size(projection, weight="weight")
+    # nx.density(projection)
+    # nx.k_core(projection...)

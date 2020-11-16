@@ -71,7 +71,12 @@ __sub_colors = {"DevilMayCry": "#ff5555",
                 None: "#8b4513",
                 "Systems": "#ff79c6",
                 "VGames": "#50fa7b",
-                "General": "#8be9fd"}
+                "General": "#8be9fd",
+                "Sony": "#0112fe",
+                "Xbox": "#107c10",
+                "Nintendo": "#e60012",
+                "PC": "#bd93f9",
+                "Multi": "#ffb86c"}
 
 
 # Yes, this function is misnamed.
@@ -87,7 +92,6 @@ def subreddit_colors(subreddit):
     -------
     str
         Hex color.
-
     """
     if isinstance(subreddit, (Set, List)) & len(subreddit):
         return __sub_colors["multiple_subs"]\
