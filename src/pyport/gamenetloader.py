@@ -115,7 +115,6 @@ def measures(gamers_nx):
     # Average Shortest Path
     # Radius, Periphery
     #. Center
-    # components = sorted(nx.connected_components(projection), key=len, reverse=True)
     # list(map(len, comps[:10]))
     # nx.node_connectivity
     # nx.minimum_node_cut
