@@ -85,7 +85,7 @@ def load_network(path, n_degree=DEFAULT_N_DEGREE):
 
 
 def load(path=None):
-    """Loads gamer network from path if specified or tries alt paths.
+    """Load gamer network from path if specified or try alternative paths.
 
     Parameters
     ----------

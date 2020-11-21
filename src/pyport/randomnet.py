@@ -12,22 +12,48 @@ def random_graph(top_n, bottom_n, edge_n):
 
     # Sanity check. Useless sanity check.
     assert(nx.bipartite.is_bipartite(G))
+    # The bottom/right nodes are set as 1 under the "bipartite" attribute.
+    # So, I pull out those nodes using a set comprehension to pass to
+    # bipartite.weighted_projected_graph.
     bnodes = {node for node, value in
               nx.get_node_attributes(G, "bipartite").items()
               if value == 1}
     return nx.bipartite.weighted_projected_graph(G, bnodes)
 
 
-def random_clust(queue, keep_going,top_n, bottom_n, edge_n):
+def random_clust(queue, keep_going,top_n, bottom_n, edge_n, **kwargs):
     while keep_going.value:
         # print(i)
         G = random_graph(top_n, bottom_n, edge_n)
         queue.put(nx.average_clustering(G, weight="weight"))
 
-def random_deg_cent(queue, keep_going, top_n, bottom_n, edge_n):
+
+def random_density(queue, keep_going, top_n, bottom_n, edge_n, **kwargs):
+    while keep_going.value:
+        G = random_graph(top_n, bottom_n, edge_n)
+        # Density is the actual edges/possible edges
+        queue.put(nx.density(G))
+
+
+def random_deg_cent(queue, keep_going, top_n, bottom_n, edge_n, **kwargs):
     while keep_going.value:
         G = random_graph(top_n, bottom_n, edge_n)
         queue.put(nx.degree_centrality(G))
+
+
+def random_assort(queue, keep_going, top_n, bottom_n, edge_n, **kwargs):
+    attributes = np.unique(list(nx.get_node_attributes(kwargs["projection"],
+                                                       kwargs["attr"]).values()))
+    length = len(attributes)
+    attr = kwargs["attr"]
+
+    while keep_going.value:
+        G = random_graph(top_n, bottom_n, edge_n)
+        nx.set_node_attributes(G,
+                               {node: attributes[np.random.randint(0, length)]
+                                for node in G.nodes()},
+                               attr)
+        queue.put(nx.attribute_assortativity_coefficient(G, attr))
 
 
 def dispatcher(gamers_df, projection, func, top="permalink", bottom="author",
@@ -77,7 +103,9 @@ def dispatcher(gamers_df, projection, func, top="permalink", bottom="author",
     for i in range(processes):
         proc = Process(target=func,
                        name="randomnet_{}".format(i),
-                       args=(queue, keep_going, top_n, bottom_n, edge_n))
+                       args=(queue, keep_going, top_n, bottom_n, edge_n),
+                       kwargs={"projection": projection,
+                               "attr": "sub_color"})
         proc.start()
         handles.append(proc)
 
