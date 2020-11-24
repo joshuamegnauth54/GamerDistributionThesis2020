@@ -12,10 +12,12 @@ def draw_gamers(gamers, algo="sfdp", color="sub_color", edge_color="#282a36",
                      ax=ax,
                      node_size=size,
                      node_color=list(nx.get_node_attributes(gamers,
-                                                            color).values()),
+                                                            color).values())
+                         if color[0] != '#' else color,
                      # alpha=0.75,
                      edge_color=list(nx.get_node_attributes(gamers,
-                                                            edge_color).values()),
+                                                            edge_color).values())
+                         if edge_color[0] != '#' else edge_color,
                      label=color
                      )
     fig.tight_layout()
@@ -24,8 +26,24 @@ def draw_gamers(gamers, algo="sfdp", color="sub_color", edge_color="#282a36",
     return (fig, ax)
 
 
-def draw_degree_centrality(gamers):
-    deg_cent = [dc * 10000 for dc in nx.degree_centrality(gamers).values()]
+def draw_degree_centrality(gamers, offset=10000):
+    """Plot gamers with node sizes determined by degree centrality * offset.
+
+    Parameters
+    ----------
+    gamers : networkx.Graph
+        Graph to plot.
+    offset : int, optional
+        Value to multiply each degree centrality by to account for small
+        values. The default is 10000.
+
+    Returns
+    -------
+    (matplotlib.pyplot.figure, matplotlib.pyplot.Axes)
+        Figure/ax of plot.
+    """
+
+    deg_cent = [dc * offset for dc in nx.degree_centrality(gamers).values()]
     return draw_gamers(gamers, color="SysGamGen", edge_color="sub_color",
                        size=deg_cent)
 

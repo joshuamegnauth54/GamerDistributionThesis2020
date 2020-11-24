@@ -41,23 +41,24 @@ def random_deg_cent(queue, keep_going, top_n, bottom_n, edge_n, **kwargs):
         queue.put(nx.degree_centrality(G))
 
 
-def random_assort(queue, keep_going, top_n, bottom_n, edge_n, **kwargs):
-    attributes = np.unique(list(nx.get_node_attributes(kwargs["projection"],
-                                                       kwargs["attr"]).values()))
-    length = len(attributes)
-    attr = kwargs["attr"]
+def random_assort(queue, keep_going, top_n, bottom_n, edge_n, unique_attr):
+    # Use unique_attr to generate unique (i.e. 0 to unique_attr) classes
+    # for an attribute, attr_name
+    attr = np.arange(0, unique_attr, 1)
+    attr_name = "attribute"
 
     while keep_going.value:
         G = random_graph(top_n, bottom_n, edge_n)
+        # Select a random attribute from
         nx.set_node_attributes(G,
-                               {node: attributes[np.random.randint(0, length)]
+                               {node: attr[np.random.randint(0, unique_attr)]
                                 for node in G.nodes()},
-                               attr)
-        queue.put(nx.attribute_assortativity_coefficient(G, attr))
+                               attr_name)
+        queue.put(nx.attribute_assortativity_coefficient(G, attr_name))
 
 
 def dispatcher(gamers_df, projection, func, top="permalink", bottom="author",
-               replicates=100000, processes=4):
+               replicates=100000, processes=4, assort=None):
     """Calculate replicates from random graphs.
 
     Parameters
@@ -77,6 +78,9 @@ def dispatcher(gamers_df, projection, func, top="permalink", bottom="author",
         Amount of replicates to generate. The default is 100000.
     processes : int, optional
         Amount of processes to launch. The default is 4.
+    assort : str, optional
+        The top parameter is used to calculate the random attribute for
+        random_assort. You may override top using assort.
 
     Returns
     -------
@@ -89,6 +93,11 @@ def dispatcher(gamers_df, projection, func, top="permalink", bottom="author",
     top_n = gamers_df[top].nunique()
     bottom_n = gamers_df[bottom].nunique()
     edge_n = len(projection.edges())
+
+    # The keyword unique_attr is simply the count of unique possible
+    # attributes.
+    kwargs = {"unique_attr": gamers_df[assort or top].nunique()}\
+        if func is random_assort else []
 
     # Multiprocessing stuff.
     # A threadsafe Queue is easier than sharing a memory mapped buffer since
@@ -104,8 +113,7 @@ def dispatcher(gamers_df, projection, func, top="permalink", bottom="author",
         proc = Process(target=func,
                        name="randomnet_{}".format(i),
                        args=(queue, keep_going, top_n, bottom_n, edge_n),
-                       kwargs={"projection": projection,
-                               "attr": "sub_color"})
+                       kwargs=kwargs)
         proc.start()
         handles.append(proc)
 
