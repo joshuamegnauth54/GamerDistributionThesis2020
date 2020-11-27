@@ -3,9 +3,10 @@ import matplotlib.pyplot as plt
 
 
 def draw_gamers(gamers, algo="sfdp", color="sub_color", edge_color="#282a36",
-                size=32):
+                size=32, fig=None, ax=None):
     pos = nx.nx_pydot.graphviz_layout(gamers, prog=algo)
-    fig, ax = plt.subplots(figsize=(16, 16))
+    if fig is None and ax is None:
+        fig, ax = plt.subplots(figsize=(16, 16))
     nx.draw_networkx(gamers,
                      pos,
                      with_labels=False,
@@ -48,13 +49,37 @@ def draw_degree_centrality(gamers, offset=10000):
                        size=deg_cent)
 
 
-def draw_diameter_radius(lcc):
+def draw_k_core_decompose(gamers, k_range=range(8, 16), color="SysGamGen",
+                          edge_color="sub_color"):
+    row = int(len(k_range)/2) if ~(len(k_range) % 2) else 1 + int(len(k_range)/2)
+    col = int(len(k_range)/2)
+
+    fig, axes = plt.subplots(row, col, figsize=(16, 16))
+
+    for ax, k in zip(axes.flat, k_range):
+        decomposed = nx.k_core(gamers, k)
+
+        # Ignoring return values since they're the same fig, ax I passed in.
+        draw_gamers(decomposed, color=color, edge_color=edge_color,
+                    fig=fig, ax=ax)
+
+    return fig, axes
+
+
+def draw_diameter_radius(lcc, cent_offset=3000, peri_offset=1000,
+                         default_offset=100):
     """Draw the barycenter and periphery of the gamer network.
 
     Parameters
     ----------
     lcc : networkx.Graph
         Largest connected component of the gamers network projection.
+    cent_offset : int
+        Size offset for center nodes.
+    peri_offset : int
+        Size offset for periphery nodes.
+    default_offset : int
+        Size offset for all other nodes.
 
     Returns
     -------
@@ -75,14 +100,11 @@ def draw_diameter_radius(lcc):
 
     # Figuring out a decent size is extraordinarily difficult.
     # I'd like for both center nodes as well as periphery nodes to stand out.
-    size = [3000 if node in center
-            else 1000 if node in periphery
-            else 100
+    size = [cent_offset if node in center
+            else peri_offset if node in periphery
+            else default_offset
             for node in lcc.nodes()]
 
     # Plot and return (fig, ax)
     return draw_gamers(lcc, color="CentPeri", edge_color="sub_color",
                        size=size)
-
-def draw_k_cores(projection, k_range):
-    pass

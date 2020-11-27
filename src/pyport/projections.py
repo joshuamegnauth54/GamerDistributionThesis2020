@@ -3,8 +3,9 @@ import pandas as pd
 
 from gamenetattrs import add_attributes
 
+
 def project_gamers(gamers_df, top, bottom):
-    """Projects top onto bottom for gamers_df.
+    """Project top onto bottom for gamers_df.
 
     Parameters
     ----------
@@ -29,21 +30,45 @@ def project_gamers(gamers_df, top, bottom):
 
 def project_auth_sub_bsub(gamers_df: pd.DataFrame):
     """Build a bipartite network of Redditor->Subreddit with subs as
-    the bottom nodes."""
-    projection = project_gamers(gamers_df, "author", "subreddit")
+    the bottom nodes.
 
-    return projection
+    Parameters
+    ----------
+    gamers_df: pandas.DataFrame
+        Cleaned network as a DataFrame.
+    """
+    return project_gamers(gamers_df, "author", "subreddit")
 
 
 def project_auth_sub_bauth(gamers_df: pd.DataFrame):
-    """Builds a bipartite network of Redditor->Subreddit with Redditors as the
-    bottom nodes."""
-    projection = project_gamers(gamers_df, "subreddit", "author")
+    """Build a bipartite network of Redditor->Subreddit with Redditors as the
+    bottom nodes.
+
+    Parameters
+    ----------
+    gamers_df: pandas.DataFrame
+        Cleaned network as a DataFrame.
+
+    Returns
+    -------
+    networkx.Graph
+        Graph projection.
+    """
+    return project_gamers(gamers_df, "subreddit", "author")
 
 
 def project_auth_tops_bauth(gamers_df: pd.DataFrame):
     """Builds a bipartite network of Redditor->Topics with Redditors as the
-    bottom nodes."""
-    projection = project_gamers(gamers_df, "permalink", "author")
+    bottom nodes.
 
-    return projection
+    Parameters
+    ----------
+    gamers_df: pandas.DataFrame
+        Cleaned network as a DataFrame.
+
+    Returns
+    -------
+    networkx.Graph
+        Graph projection.
+    """
+    return project_gamers(gamers_df, "permalink", "author")
