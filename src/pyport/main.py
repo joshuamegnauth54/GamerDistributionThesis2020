@@ -2,6 +2,8 @@ import networkx as nx
 
 from gamenetloader import load
 from projections import project_auth_tops_bauth
+from gamersdraw import draw_degree_centrality, draw_diameter_radius,\
+    draw_k_core_decompose
 
 # Maybe put these in a notebook?
 # gamers_df.groupby("author").subreddit.nunique().sort_values(ascending=False)
@@ -43,3 +45,22 @@ def test_small(N):
     assert(N < len(gamers_full))
     gamers_small = gamers_full.sample(N)
     return (gamers_full, gamers_small, project_auth_tops_bauth(gamers_small))
+
+
+def draw_and_save(projection, path="../../assets/", k_range=range(8, 16, 4)):
+    print("Drawing graph augmented with degree centrality.")
+    fig, ax = draw_degree_centrality(projection)
+    fig.savefig(path + "network_degcent.tiff")
+
+    print("Calculating largest connected component.")
+    lcc = largest_connected_component(projection)
+    print("Drawing diameter and radius.")
+    fig, ax = draw_diameter_radius(lcc)
+    fig.savefig(path + "network_diarad.tiff")
+
+    for k_min in k_range:
+        k_max = k_min + 4
+        print("Drawing k core for k {} -> {}".format(k_min, k_max))
+        fig, ax = draw_k_core_decompose(projection, range(k_min, k_max))
+        fig.savefig(path + "network_k_core_{}_{}.tiff".format(k_min, k_max))
+

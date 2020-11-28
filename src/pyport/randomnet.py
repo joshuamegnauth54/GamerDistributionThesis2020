@@ -38,7 +38,8 @@ def random_density(queue, keep_going, top_n, bottom_n, edge_n, **kwargs):
 def random_deg_cent(queue, keep_going, top_n, bottom_n, edge_n, **kwargs):
     while keep_going.value:
         G = random_graph(top_n, bottom_n, edge_n)
-        queue.put(nx.degree_centrality(G))
+        queue.put(np.mean(np.fromiter(nx.degree_centrality(G).values(),
+                                      float)))
 
 
 def random_assort(queue, keep_going, top_n, bottom_n, edge_n, unique_attr):
@@ -121,8 +122,12 @@ def dispatcher(gamers_df, projection, func, top="permalink", bottom="author",
     # Reps_buff shall hold all of the replicates.
     reps_buff = np.zeros(replicates)
     for j in range(replicates):
-        # The Queue may hang if the threads implode in some way without
+        # The Queue may hang if the processes implode in some way without
         # throwing an exception.
+        # So let's just keep checking to make sure at least one process is
+        # alive.
+        if not all(map(lambda proc: proc.is_alive(), handles)):
+            raise RuntimeError("All processes are dead. RIP.")
         reps_buff[j] = queue.get()
 
     # Stop processes by setting keep_going to False.

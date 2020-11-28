@@ -110,20 +110,15 @@ def load(path=None):
 def measures(gamers_nx):
     pass
     # nx.clustering(projection, weight="weight")
-    # nx.average_clustering(gamers_nx, weight="weight")
     # Diameter
     # Average Shortest Path
     # Radius, Periphery
-    #. Center
     # list(map(len, comps[:10]))
     # nx.node_connectivity
     # nx.minimum_node_cut
     # max_cliq = nx.make_max_clique_graph(gamers_nx)
     # nx.degree_assortativity_coefficient(projection, weight="weight")
     # nx.attribute_assortativity_coefficient(projection, "SysGamGen")
-    # nx.smallworld.sigma(projection)
-    # Closeness vitality
-    # nx.degree_assortativity_coefficient(projection, weight="weight")
     # nx.harmonic_centrality(projection)
     # nx.current_flow_closeness_centrality(projection_lcc, weight="weight", solver="full")
     # nx.effective_size(projection, weight="weight")
