@@ -25,6 +25,8 @@ def project_gamers(gamers_df, top, bottom):
     Bnodes = set(gamers_df[bottom].values)
     projection = nx.bipartite.weighted_projected_graph(G, Bnodes)
     add_attributes(projection, gamers_df)
+    projection.name = "Gamers network projection; top: {} bottom: {}"\
+        .format(top, bottom)
     return projection
 
 

@@ -22,8 +22,10 @@ def sorted_components(projection):
 
 
 def largest_connected_component(projection):
-    return nx.subgraph(projection,
-                       sorted_components(projection)[0])
+    lcc = nx.subgraph(projection,
+                      sorted_components(projection)[0])
+    lcc.name = "LCC of {}".format(projection.name)
+    return lcc
 
 
 def test_small(N):
@@ -64,3 +66,20 @@ def draw_and_save(projection, path="../../assets/", k_range=range(8, 16, 4)):
         fig, ax = draw_k_core_decompose(projection, range(k_min, k_max))
         fig.savefig(path + "network_k_core_{}_{}.tiff".format(k_min, k_max))
 
+
+def p_value_charts(projection):
+    pass
+
+
+def print_useful_metrics(projection):
+    lcc = largest_connected_component(projection)
+    # Avoid recalculating eccentricity
+    lcc_ecc = nx.eccentricity(lcc)
+
+    # Standard graph info. The loader functions set names so these are clear.
+    print(nx.info(projection))
+    print(nx.info(lcc))
+
+    # Radius and diameter are only valid for connected graphs
+    print("Radius: {}", nx.radius(lcc, lcc_ecc))
+    print("Diameter: {}", nx.diameter(lcc, lcc_ecc))

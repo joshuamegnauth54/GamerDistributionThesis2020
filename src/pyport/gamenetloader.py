@@ -110,9 +110,6 @@ def load(path=None):
 def measures(gamers_nx):
     pass
     # nx.clustering(projection, weight="weight")
-    # Diameter
-    # Average Shortest Path
-    # Radius, Periphery
     # list(map(len, comps[:10]))
     # nx.node_connectivity
     # nx.minimum_node_cut
