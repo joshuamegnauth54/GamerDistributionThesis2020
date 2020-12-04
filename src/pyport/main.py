@@ -81,5 +81,24 @@ def print_useful_metrics(projection):
     print(nx.info(lcc))
 
     # Radius and diameter are only valid for connected graphs
-    print("Radius: {}", nx.radius(lcc, lcc_ecc))
-    print("Diameter: {}", nx.diameter(lcc, lcc_ecc))
+    print("Radius: {}".format(nx.radius(lcc, lcc_ecc)))
+    print("Diameter: {}".format(nx.diameter(lcc, lcc_ecc)))
+
+    # Number of communities
+    print("Number of communities: {}".format(
+        len(list(nx.community.asyn_lpa_communities(projection,
+                                                   "weight", 314)))))
+    print("LCC number of communities: {}".format(
+        len(list(nx.community.asyn_lpa_communities(lcc,
+                                                   "weight", 314)))))
+
+    # Clustering
+    print("Avg. clust: {}".format(
+        nx.average_clustering(projection, weight="weight")))
+    print("LCC avg. clust: {}".format(
+        nx.average_clustering(lcc, weight="weight")))
+
+    # Assortativity
+    print("Degree assortativity: {}".format(
+        nx.degree_assortativity_coefficient(projection, weight="weight")))
+    nx.attribute_assortativity_coefficient(projection, "SysGamGen")

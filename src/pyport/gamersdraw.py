@@ -2,7 +2,7 @@ import networkx as nx
 import matplotlib.pyplot as plt
 
 
-def draw_gamers(gamers, algo="sfdp", color="sub_color", edge_color="#282a36",
+def draw_gamers(gamers, algo="sfdp", color="sub_color", edge_color="#f8f8f2",
                 size=32, fig=None, ax=None):
     pos = nx.nx_pydot.graphviz_layout(gamers, prog=algo)
     if fig is None and ax is None:
@@ -27,7 +27,8 @@ def draw_gamers(gamers, algo="sfdp", color="sub_color", edge_color="#282a36",
     return (fig, ax)
 
 
-def draw_degree_centrality(gamers, offset=10000):
+def draw_degree_centrality(gamers, offset=10000, color="SysGamGen",
+                           edge_color="sub_color"):
     """Plot gamers with node sizes determined by degree centrality * offset.
 
     Parameters
@@ -37,6 +38,10 @@ def draw_degree_centrality(gamers, offset=10000):
     offset : int, optional
         Value to multiply each degree centrality by to account for small
         values. The default is 10000.
+    color : str, optional
+        Node color attribute. The default is "SysGamGen."
+    edge_color : str, optional
+        Edge color attribute. The default is "sub_color."
 
     Returns
     -------
@@ -45,15 +50,18 @@ def draw_degree_centrality(gamers, offset=10000):
     """
 
     deg_cent = [dc * offset for dc in nx.degree_centrality(gamers).values()]
-    return draw_gamers(gamers, color="SysGamGen", edge_color="sub_color",
+    return draw_gamers(gamers, color=color, edge_color=edge_color,
                        size=deg_cent)
 
 
 def draw_k_core_decompose(gamers, k_range=range(8, 16), color="SysGamGen",
                           edge_color="sub_color"):
-    row = int(len(k_range)/2) if ~(len(k_range) % 2) else 1 + int(len(k_range)/2)
-    col = int(len(k_range)/2)
+    row = (int(len(k_range)/2)
+           if ~(len(k_range) % 2) else 1 + int(len(k_range)/2))
+    col = (int(len(k_range)/2)
+           if len(k_range) != 2 else 2)
 
+    # I want a large figure because this looks terrible if too small.
     fig, axes = plt.subplots(row, col, figsize=(16, 16))
 
     for ax, k in zip(axes.flat, k_range):
