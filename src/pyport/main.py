@@ -1,5 +1,7 @@
 import networkx as nx
 
+from matplotlib.patches import Patch
+
 from gamenetloader import load
 from projections import project_auth_tops_bauth
 from gamersdraw import draw_degree_centrality, draw_diameter_radius,\
@@ -51,9 +53,39 @@ def test_small(N):
 
 def draw_and_save(projection, path="../../assets/", k_range=range(8, 16, 4)):
     print("Drawing graph augmented with degree centrality.")
-    fig, ax = draw_degree_centrality(projection)
+    fig, ax = draw_degree_centrality(projection, alpha=0.7)
+    # Misc options that need to be deduped from my 790 project.
+    ax.set_frameon(False)
+    ax.set_title("Size = degree centrality",
+                 fontdict={"fontsize": 24,
+                           "color": "#f8f8f2",
+                           "fontweight": "bold"})
+    # Manual legend creation
+    sys_hand = Patch(color="#ff79c6")
+    sys_hand.set_label("Systems/consoles")
+    games_hand = Patch(color="#50fa7b")
+    games_hand.set_label("Games or game series")
+    gen_hand = Patch(color="#8be9fd")
+    gen_hand.set_label("Miscellaneous")
+
+
+    ax.legend(handles=[sys_hand, games_hand, gen_hand],
+              loc="upper left",
+              fontsize=14,
+              facecolor="#282a36",
+              edgecolor="#44475a",
+              frameon=False)
+
+    # Manually setting the font color for the legend as the default is too
+    # dark
+    legend = ax.get_legend()
+    for lab in legend.get_texts():
+        lab.set_color("#f8f8f2")
+
+    # And finally save the rendered network.
     fig.savefig(path + "network_degcent.tiff")
 
+    # K-core decomposition
     print("Calculating largest connected component.")
     lcc = largest_connected_component(projection)
     print("Drawing diameter and radius.")

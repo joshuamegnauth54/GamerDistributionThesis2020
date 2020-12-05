@@ -1,20 +1,36 @@
 import networkx as nx
 import pandas as pd
 
-DEFAULT_N_DEGREE = 3
+# Shrink the network by removing everyone who doesn't appear as frequently
+# as this value.
+DEFAULT_N_FREQUENCY = 3
 
 
-def shrink_network_by(gamers_df, n_degree):
+def shrink_network_by(gamers_df, n_freq):
+    """Remove nodes that appear less than n_freq.
+    Parameters
+    ----------
+    gamers_df : pandas.DataFrame
+        Gamers network as a DataFrame.
+    n_freq : int
+        Positive integer by which to shrink the network.
+
+    Returns
+    -------
+    gamers_df : pandas.DataFrame
+        Filtered copy of gamers_df.
+
+    """
     # This could be a one liner, but Python looks a bit messy like that.
-    # I'm filtering for authors who appear at least as much as n_degree
-    mask = gamers_df.author.value_counts() >= n_degree
+    # I'm filtering for authors who appear at least as much as n_freq
+    mask = gamers_df.author.value_counts() >= n_freq
     mask = gamers_df.author.value_counts()[mask].index
     return gamers_df.loc[gamers_df.author.isin(mask)]
 
 
-def load_network(path, n_degree=DEFAULT_N_DEGREE):
+def load_network(path, n_freq=DEFAULT_N_FREQUENCY):
     gamers = pd.read_csv(path)
-    gamers = shrink_network_by(gamers, n_degree)
+    gamers = shrink_network_by(gamers, n_freq)
 
     # ======================================
     # Systems, games, and general subreddits
