@@ -1,4 +1,5 @@
 import networkx as nx
+import numpy as np
 import matplotlib.pyplot as plt
 
 
@@ -25,7 +26,7 @@ def draw_gamers(gamers, algo="sfdp", color="sub_color", edge_color="#f8f8f2",
     fig.tight_layout()
     fig.patch.set_facecolor("#282a36")
     ax.patch.set_facecolor("#282a36")
-    return (fig, ax)
+    return fig, ax
 
 
 def draw_degree_centrality(gamers, offset=10000, color="SysGamGen",
@@ -50,9 +51,11 @@ def draw_degree_centrality(gamers, offset=10000, color="SysGamGen",
         Figure/ax of plot.
     """
 
-    deg_cent = [dc * offset for dc in nx.degree_centrality(gamers).values()]
-    return draw_gamers(gamers, color=color, edge_color=edge_color,
-                       size=deg_cent, **kwargs), deg_cent
+    # deg_cent = [dc * offset for dc in nx.degree_centrality(gamers).values()]
+    deg_cent = np.fromiter(nx.degree_centrality(gamers).values(),
+                           np.float64)
+    return (*draw_gamers(gamers, color=color, edge_color=edge_color,
+                         size=deg_cent*offset, **kwargs), deg_cent)
 
 
 def draw_k_core_decompose(gamers, k_range=range(8, 16), color="SysGamGen",

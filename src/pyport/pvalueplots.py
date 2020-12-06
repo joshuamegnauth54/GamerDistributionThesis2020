@@ -5,7 +5,7 @@ import numpy as np
 from collections.abc import Iterable
 
 
-def p_value_plots(observed, replicates, labels, plot_obs = True,
+def p_value_plots(observed, replicates, labels, plot_obs=True, plot_p=True,
                   figsize=(20, 16)):
 
     # Replicates needs to be an array of arrays.
@@ -28,9 +28,10 @@ def p_value_plots(observed, replicates, labels, plot_obs = True,
     for ax, obs, reps, label in zip(axes.flat, observed, replicates, labels):
         ax.hist(reps, bins="fd", color="#bd93f9")
 
-        # Add observed value line
+        # Add observed value line and p-value
         if plot_obs:
-            ax.axvline(obs, color="#ff5555")
+            ax.axvline(obs, color="#ff5555", antialiased=True)
+        if plot_p:
             # P-values are the probability of obtaining results at least as
             # extreme as what was observed.
             # So sum(replicates >= observed)/len(replicates)
@@ -40,14 +41,18 @@ def p_value_plots(observed, replicates, labels, plot_obs = True,
             p_value = np.mean(reps >= obs)
 
         # Labels and aesthetics
-        ax.set_title(label, fontsize=18, fontweight="bold")
-        ax.grid(axis='y')
+        ax.set_title(label, fontsize=22, fontweight="bold", color="#f8f8f2")
+        ax.grid(axis='y', color="#8be9fd")
         ax.set_axisbelow(True)
         ax.set_frame_on(False)
+        ax.patch.set_facecolor("#282a36")
+        ax.tick_params(colors="#8be9fd", labelsize=16)
 
-    # Figure misc.
+    # Figure misc. These are better to set after plotting.
+    fig.patch.set_facecolor("#282a36")
     fig.tight_layout()
-    fig.suptitle("Random graph replicates of network measures + p-values",
-                 fontsize=32, fontweight="bold", y=1.05)
+    fig.suptitle("Random graph replicates of network measures{}".format(
+        " + observed in red" if plot_obs else ""),
+        fontsize=36, fontweight="bold", color="#f8f8f2", y=1.05)
 
     return fig, axes

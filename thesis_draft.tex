@@ -188,7 +188,7 @@ My data set\footnote{Available here: https://github.com/joshuamegnauth54/GamerDi
     \hline
   \end{tabular}
   \caption{Network and LCC statistics.}
-  \label
+  \label{fig:NetworkStats}
 \end{table}
 My analysis uses the open source Python\footnote{https://python.org} library NetworkX (\cite{networkx}). Python is an interpreted, high level general purpose programming language. In short, Python is powerful and fast to write. NetworkX is a native Python library that implements an impressive collection of graph algorithms including random graph generators. Alternatives include igraph, a C library with Python and R bindings; and petgraph, a Rust crate. NetworkX sports an easy and pragmatic API but is also far slower than libraries written in speedy systems languages. Besides NetworkX, GraphViz and Pandas, both open source, were used for auxiliary tasks such as visualizations as well as wrangling my raw data. The source code for the analysis is located in the same repository as the thesis itself\footnote{Here: https://github.com/joshuamegnauth54/GamerDistributionThesis2020/tree/master/src/pyport}.
 
@@ -197,7 +197,9 @@ Big data tend to be intractable due to the three Vs as discussed earlier. Many t
 Notably, other authors, such as Cauteruccio et alia, ran into computational issues as well. Those researchers solved their problem by using server caliber hardware to run their code and calculations. Future research into the distribution of gamers on Reddit would require both vastly more data as well as more powerful hardware for those data.
 
 \subsection{Network processing}
-Like all data my network required processing and cleaning. Likewise, data processing should be disclosed for reproducibility. I pruned my network by removing nodes that appear less than three times. The value three is somewhat arbitrary as I intended to maximize the number of observations kept while removing a good chunk of the noise. A threshold of three did not shrink the network unreasonably; the majority of the data remained and the network became more tractable.
+Like all data my network required processing and cleaning. Likewise, data processing should be disclosed for reproducibility. I pruned my network by removing nodes that appear less than three times. The value three is somewhat arbitrary as I intended to maximize the number of observations kept while removing a good chunk of the noise. A threshold of three did not shrink the network unreasonably; the majority of the data remained and manageability increased.
+
+Next, subreddits were divided into two assortativity measures shown in \ref{}
 
 \printbibliography
 

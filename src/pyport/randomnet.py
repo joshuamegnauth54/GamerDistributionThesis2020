@@ -23,7 +23,7 @@ def random_graph(top_n, bottom_n, edge_n):
     return nx.bipartite.weighted_projected_graph(G, bnodes)
 
 
-def random_clust(queue, keep_going,top_n, bottom_n, edge_n, **kwargs):
+def random_clust(queue, keep_going, top_n, bottom_n, edge_n, **kwargs):
     while keep_going.value:
         # print(i)
         G = random_graph(top_n, bottom_n, edge_n)
