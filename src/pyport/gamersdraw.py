@@ -66,7 +66,7 @@ def draw_k_core_decompose(gamers, k_range=range(8, 16), color="SysGamGen",
            if len(k_range) != 2 else 2)
 
     # I want a large figure because this looks terrible if too small.
-    fig, axes = plt.subplots(row, col, figsize=(16, 16))
+    fig, axes = plt.subplots(row, col, figsize=(22, 22))
 
     for ax, k in zip(axes.flat, k_range):
         decomposed = nx.k_core(gamers, k)
@@ -120,3 +120,34 @@ def draw_diameter_radius(lcc, cent_offset=3000, peri_offset=1000,
     # Plot and return (fig, ax)
     return draw_gamers(lcc, color="CentPeri", edge_color="sub_color",
                        size=size)
+
+
+def draw_lollypop(counts_df, suptitle):
+    fig, ax = plt.subplots(figsize=(20, 20))
+
+    # Horizontal lines are the lollypop "sticks"
+    ax.hlines(counts_df.index, xmin=0, xmax=counts_df, color="#8be9fd")
+    # Dots are the lolly pops themselves
+    ax.plot(counts_df, counts_df.index, "o", color="#ff5555")
+
+    # Labels and customization
+    # The axis labels will likely be clear from the title.
+    ax.set_xlabel("")
+    ax.set_ylabel("")
+    # X axis helps with distinguishing points. Y does not.
+    ax.grid(axis='x', color="#8be9fd")
+    ax.set_axisbelow(True)
+    ax.set_frame_on(False)
+    ax.patch.set_facecolor("#282a36")
+    ax.tick_params(colors="#8be9fd", labelsize=16)
+
+    # Figure stuff
+    fig.suptitle(suptitle,
+                 fontsize=32,
+                 color="#f8f8f2",
+                 fontweight="bold",
+                 y=1.01)
+    fig.patch.set_facecolor("#282a36")
+    fig.tight_layout()
+
+    return fig, ax

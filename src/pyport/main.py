@@ -68,7 +68,6 @@ def draw_and_save(projection, path="../../assets/", k_range=range(8, 16, 4)):
     gen_hand = Patch(color="#8be9fd")
     gen_hand.set_label("Miscellaneous")
 
-
     ax.legend(handles=[sys_hand, games_hand, gen_hand],
               loc="upper left",
               fontsize=14,

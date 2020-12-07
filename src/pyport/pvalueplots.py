@@ -6,7 +6,7 @@ from collections.abc import Iterable
 
 
 def p_value_plots(observed, replicates, labels, plot_obs=True, plot_p=True,
-                  figsize=(20, 16)):
+                  figsize=(20, 20)):
 
     # Replicates needs to be an array of arrays.
     # Observed and labels must be arrays.
