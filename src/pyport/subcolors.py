@@ -76,7 +76,8 @@ __sub_colors = {"DevilMayCry": "#ff5555",
                 "Xbox": "#107c10",
                 "Nintendo": "#e60012",
                 "PC": "#bd93f9",
-                "Multi": "#ffb86c"}
+                "Multi": "#ffb86c",
+                "NonSys": "#f1fa8c"}
 
 
 # Yes, this function is misnamed.

@@ -8,6 +8,8 @@ def parse_auth_attr(gamers_df, node, attr):
 
     # Some attributes preclude some subreddits entirely. Thus, I must check
     # for a ValueError here.
+    # (The above isn't accurate anymore, but I don't have time to modify
+    # the function in case I break it.)
     try:
         most_posted = gamers_df\
                                 .loc[gamers_df.author == node, attr]\

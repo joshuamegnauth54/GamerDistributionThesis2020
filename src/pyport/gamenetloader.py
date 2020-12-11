@@ -8,6 +8,7 @@ DEFAULT_N_FREQUENCY = 3
 
 def shrink_network_by(gamers_df, n_freq):
     """Remove nodes that appear less than n_freq.
+
     Parameters
     ----------
     gamers_df : pandas.DataFrame
@@ -29,6 +30,22 @@ def shrink_network_by(gamers_df, n_freq):
 
 
 def load_network(path, n_freq=DEFAULT_N_FREQUENCY):
+    """Loads and processes gamers network from path.
+
+    Parameters
+    ----------
+    path : str
+        Path to network.
+    n_freq : int, optional
+        Filter out posters who appear less than n_freq.
+        The default is DEFAULT_N_FREQUENCY (3).
+
+    Returns
+    -------
+    gamers : pandas.DataFrame
+        DataFrame of processed gamers network.
+
+    """
     gamers = pd.read_csv(path)
     gamers = shrink_network_by(gamers, n_freq)
 
@@ -42,13 +59,13 @@ def load_network(path, n_freq=DEFAULT_N_FREQUENCY):
                  "MonsterHunterWorld", "demonssouls", "wow", "Minecraft",
                  "Overwatch", "GlobalOffensive", "leagueoflegends",
                  "zelda", "AnimalCrossing", "witcher", "PUBATTLEGROUNDS",
-                 "SEGA", "smashbros", "rocketleague", "FallGuysGame",
-                 "StardewValley"]
+                 "SEGA", "smashbros", "RocketLeague", "FallGuysGame",
+                 "StardewValley", "DotA2"]
 
     sys_subs = ["psx", "PS3", "ps2", "pcmasterrace", "nintendo",
                 "xboxone", "pcgaming", "PS4", "Steam", "buildapc",
-                "NintendoSwitch", "PS5", "XboxSeriesX", "3DS", "Xbox",
-                "Xbox360"]
+                "NintendoSwitch", "PS5", "XboxSeriesX", "3DS", "xbox",
+                "xbox360"]
 
     gen_subs = ["JRPG", "gamedesign", "linux_gaming", "otomegames",
                 "boardgames", "emulation", "Games", "gaming", "GamePhysics",
@@ -77,25 +94,32 @@ def load_network(path, n_freq=DEFAULT_N_FREQUENCY):
     # The Halo Master Chief Collection was ported to PC in 2019.
     # Buuuut the Xbox section seems lonely so I'll include Halo.
     # (This is a limitation based on how I collected the data).
-    xbox_subs = ["Xbox", "Xbox360", "xboxone", "XboxSeriesX", "halo"]
+    xbox_subs = ["xbox", "xbox360", "xboxone", "XboxSeriesX", "halo"]
 
     nintendo_subs = ["nintendo", "NintendoSwitch", "3DS", "fireemblem",
                      "pokemon", "AnimalCrossing", "smashbros", "zelda"]
 
     pc_subs = ["wow", "leagueoflegends", "GlobalOffensive", "Minecraft",
                "Overwatch", "linux_gaming", "emulation", "Steam",
-               "buildapc", "pcmasterrace", "FreeGamesOnSteam"]
+               "buildapc", "pcmasterrace", "FreeGamesOnSteam",
+               "DotA2", "pcgaming"]
 
     multi_subs = ["DarkSouls2", "darksouls", "MonsterHunter", "Fallout",
                   "DestinyTheGame", "skyrim", "metalgearsolid", "witcher",
-                  "PUBATTLEGROUNDS", "SEGA", "rocketleague", "FallGuysGame",
-                  "StardewValley", "otomegames"]
+                  "PUBATTLEGROUNDS", "SEGA", "RocketLeague", "FallGuysGame",
+                  "StardewValley", "otomegames", "Doom", "DevilMayCry",
+                  "darksouls3", "JRPG", "rpg", "IndieGaming",
+                  "MonsterHunterWorld"]
+
+    nonsys_subs = ["gamedesign", "boardgames", "Games", "gaming",
+                   "GamePhysics", "truegaming", "ShouldIbuythisgame"]
 
     gamers.loc[gamers.subreddit.isin(sony_subs), "Systems"] = "Sony"
     gamers.loc[gamers.subreddit.isin(xbox_subs), "Systems"] = "Xbox"
     gamers.loc[gamers.subreddit.isin(nintendo_subs), "Systems"] = "Nintendo"
     gamers.loc[gamers.subreddit.isin(pc_subs), "Systems"] = "PC"
     gamers.loc[gamers.subreddit.isin(multi_subs), "Systems"] = "Multi"
+    gamers.loc[gamers.subreddit.isin(nonsys_subs), "Systems"] = "NonSys"
 
     return gamers
 
@@ -122,12 +146,3 @@ def load(path=None):
             path = "https://github.com/joshuamegnauth54/GamerDistributionThesis2020/raw/master/data/gamers_reddit_medium_2020.csv"
     else:
         return load_network(path)
-
-def measures(gamers_nx):
-    pass
-    # list(map(len, comps[:10]))
-    # nx.harmonic_centrality(projection)
-    # nx.current_flow_closeness_centrality(projection_lcc, weight="weight", solver="full")
-    # nx.effective_size(projection, weight="weight")
-    # nx.density(projection)
-    # nx.k_core(projection...)
