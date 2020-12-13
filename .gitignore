@@ -141,3 +141,4 @@ dmypy.json
 *.fdb
 *.docx
 *.doc
+*.lot

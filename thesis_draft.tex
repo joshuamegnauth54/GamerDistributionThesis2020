@@ -193,81 +193,83 @@ Big data tend to be intractable due to the three Vs as discussed earlier. Many t
 Notably, other authors, such as Cauteruccio et alia, ran into computational issues as well. Those researchers solved their problem by using server caliber hardware to run their code and calculations. Future research into the distribution of gamers on Reddit would require both vastly more data as well as more powerful hardware to handle those data.
 
 \subsection{Network processing}
-\begin{table}[ht!]
+\begin{table}
   \centering
-    \begin{tabular} { c c c }
+    \begin{tabular} {c c c}
+      \hline \\
+      Subreddit & SysGamGen & Systems \\
+      \hline \\
+      DarkSouls2 & Game & Multiple \\
+      KingdomHearts & Game & Sony \\
+      darksouls & Game & Multiple \\
+      fireemblem & Game & Nintendo \\
+      MonsterHunter & Game & Multiple \\
+      Doom & Game & Multiple \\
+      bloodborne & Game & Sony \\
+      DevilMayCry & Game & Multiple \\
+      darksouls3 & Game & Multiple \\
+      pokemon & Game & Nintendo \\
+      halo & Game & Microsoft \\
+      yakuzagames & Game & Sony \\
+      Fallout & Game & Multiple \\
+      DestinyTheGame & Game & Multiple \\
+      metalgearsolid & Game & Multiple \\
+      skyrim & Game & Multiple \\
+      monsterhunterworld & Game & Multiple \\
+      demonssouls & Game & Sony \\
+      wow & Game & P.C. \\
+      MineCraft & Game & Minecraft \\
+      Overwatch & Game & P.C. \\
+      GlobalOffensive & Game & P.C. \\
+      leagueoflegends & Game & P.C. \\
+      DotA2 & Game & P.C. \\
+      zelda & Game & Nintendo \\
+      AnimalCrossing & Game & Nintendo \\
+      witcher & Game & Multiple \\
+      PUBATTLEGROUNDS & Game & P.C. \\
+      SEGA & Game & Multiple \\
+      smashbros & Game & Nintendo \\
+      RocketLeague & Game & Multiple \\
+      FallGuysGame & Game & Multiple \\
+      StarDewValley & Game & Multiple \\
+      psx & System & Sony \\
+      PS3 & System & Sony \\
+      ps2 & System & Sony \\
+      pcmasterrace & System & P.C. \\
+      nintendo & System & Nintendo \\
+      xboxone & System & Microsoft \\
+      pcgaming & System & P.C. \\
+      PS4 & System & Sony \\
+      Steam & System & P.C. \\
+      buildapc & System & P.C. \\
+      NintendoSwitch & System & Nintendo \\
+      PS5 & System & Sony \\
+      XboxSeriesX & System & Microsoft \\
+      3DS & System & Nintendo \\
+      xbox & System & Microsoft \\
+      xbox360 & System & Microsoft \\
+      JRPG & General & Multiple \\
+      gamedesign & General & Non-system \\
+      linux\_gaming & General & Non-system \\
+      otomegames & General & Multiple \\
+      boardgames & General & Non-system \\
+      emulation & General & P.C. \\
+      Games & General & Non-system \\
+      gaming & General & Non-system \\
+      GamePhysics & General & Non-system \\
+      rpg & General & Non-system \\
+      truegaming & General & Non-system \\
+      ShouldIBuythisgame & General & Non-system \\
+      FreeGamesOnSteam & General & P.C. \\
+      IndieGaming & General & Non-system \\
       \hline
-      Subreddit & SysGamGen & Systems
-      DarkSouls2 & Game & Multiple
-      KingdomHearts & Game & Sony
-      darksouls & Game & Multiple
-      fireemblem & Game & Nintendo
-      MonsterHunter & Game & Multiple
-      Doom & Game & Multiple
-      bloodborne & Game & Sony
-      DevilMayCry & Game & Multiple
-      darksouls3 & Game & Multiple
-      pokemon & Game & Nintendo
-      halo & Game & Microsoft
-      yakuzagames & Game & Sony
-      Fallout & Game & Multiple
-      DestinyTheGame & Game & Multiple
-      metalgearsolid & Game & Multiple
-      skyrim & Game & Multiple
-      monsterhunterworld & Game & Multiple
-      demonssouls & Game & Sony
-      wow & Game & P.C.
-      MineCraft & Game & Minecraft
-      Overwatch & Game & P.C.
-      GlobalOffensive & Game & P.C.
-      leagueoflegends & Game & P.C.
-      DotA2 & Game & P.C.
-      zelda & Game & Nintendo
-      AnimalCrossing & Game & Nintendo
-      witcher & Game & Multiple
-      PUBATTLEGROUNDS & Game & P.C.
-      SEGA & Game & Multiple
-      smashbros & Game & Nintendo
-      RocketLeague & Game & Multiple
-      FallGuysGame & Game & Multiple
-      StarDewValley & Game & Multiple
-      psx & System & Sony
-      PS3 & System & Sony
-      ps2 & System & Sony
-      pcmasterrace & System & P.C.
-      nintendo & System & Nintendo
-      xboxone & System & Microsoft
-      pcgaming & System & P.C.
-      PS4 & System & Sony
-      Steam & System & P.C.
-      buildapc & System & P.C.
-      NintendoSwitch & System & Nintendo
-      PS5 & System & Sony
-      XboxSeriesX & System & Microsoft
-      3DS & System & Nintendo
-      xbox & System & Microsoft
-      xbox360 & System & Microsoft
-      JRPG & General & Multiple
-      gamedesign & General & Non-system
-      linux_gaming & General & Non-system
-      otomegames & General & Multiple
-      boardgames & General & Non-system
-      emulation & General & P.C.
-      Games & General & Non-system
-      gaming & General & Non-system
-      GamePhysics & General & Non-system
-      rpg & General & Non-system
-      truegaming & General & Non-system
-      ShouldIBuythisgame & General & Non-system
-      FreeGamesOnSteam & General & P.C.
-      IndieGaming & General & Non-system
     \end{tabular}
     \caption{Listing of two main assortativity measures. SysGamGen is shorthand for Systems, Games, and General.}
     \label{tab:AssortSplit}
 \end{table}
 Like all data my network required processing and cleaning. Likewise, data processing should be disclosed for reproducibility. I pruned my network by removing nodes that appear less than three times. The value three is somewhat arbitrary as I intended to maximize the number of observations kept while removing a good chunk of the noise. A threshold of three did not shrink the network unreasonably; the majority of the data remained and manageability increased.
 
-Next, subreddits were divided into two assortativity or similarity measures shown in \ref{tab:AssortSplit}. The subs themselves were compiled in large part based on Mike Sizz's Reddit List by manually selecting the top gaming subs (\cite{redditlist}). Prior knowledge guided creating the assortativity classes. Nodes are assigned based on the sub that they posted in most frequently. Separating the subreddits by \textit{Systems, Games, and General} or each console feels naturalistic. \textit{Systems, Games, and General} classifies subreddits by whether they refer to a system (such as all subs for all consoles or P.C.s), relate to a game, or are about general purpose gaming. The \textit{Systems} distinction is similarly natural. Some subreddits are simply more associated with a specific console or company than others. For example, Mario, Zelda, Animal Crossing, Metroid, et alia are Nintendo only series. I took some liberties with series that are generally associated with a platform but have only recently become multiplatform. The Yakuza series is a quintessential PlayStation series. However, Sega recently (2019 and beyond) ported the series to P.C. Likewise, Halo is an Xbox series that 343 Industries recently ported to P.C. (2018\footnote{For the \textit{Master Chief Collection}. The first two Halo games had older P.C. ports, but Halo was still commonly thought of as an Xbox series.}) I classified these two series under their respective original platforms due to data limitations. Data limitations affect classifications in other ways as well. Gathering even more subreddits would open more potential classes. For example, perhaps genres and games would be a viable metric if I were able to scrape more data.
+Next, subreddits were divided into two assortativity or similarity measures shown in table \ref{tab:AssortSplit}. The subs themselves were compiled in large part based on Mike Sizz's Reddit List by manually selecting the top gaming subs (\cite{redditlist}). Prior knowledge guided creating the assortativity classes. Nodes are assigned based on the sub that they posted in most frequently. Separating the subreddits by \textit{Systems, Games, and General} or each console feels naturalistic. \textit{Systems, Games, and General} classifies subreddits by whether they refer to a system (such as all subs for all consoles or P.C.s), relate to a game, or are about general purpose gaming. The \textit{Systems} distinction is similarly natural. Some subreddits are simply more associated with a specific console or company than others. For example, Mario, Zelda, Animal Crossing, Metroid, et alia are Nintendo only series. I took some liberties with series that are generally associated with a platform but have only recently become multiplatform. The Yakuza series is a quintessential PlayStation series. However, Sega recently (2019 and beyond) ported the series to P.C. Likewise, Halo is an Xbox series that 343 Industries recently ported to P.C. (2018\footnote{For the \textit{Master Chief Collection}. The first two Halo games had older P.C. ports, but Halo was still commonly thought of as an Xbox series.}) I classified these two series under their respective original platforms due to data limitations. Data limitations affect classifications in other ways as well. Gathering even more subreddits would open more potential classes. For example, perhaps genres and games would be a viable metric if I were able to scrape more data.
 
 \subsection{Graph projection}
 
@@ -298,28 +300,28 @@ I calculated p-values via random graph replicates using the process defined in \
 The steps above produced 10000 replicates of average clustering, density, degree assortativity, and attribute assortativity on SysGamGen.
 
 \section{Results}
-\begin{table}[ht!]
+\begin{table}
 \centering
-  \begin{tabular} { c c c }
-    \hline
-    Metric & Full network & LCC
-    Nodes & 11474 & 11203
-    Edges & 170120 & 170080
-    Radius & \infty & 1 (122 default)
-    Diameter & \infty & 2
-    Clustering & 0.03297 & 0.03372
-    Density & 0.00258 & 0.00271
-    Degree assortativity & 0.17329 & 0.173
-    Assort (SysGamGen) & 0.78194 & 0.7819
-    Assort (Systems) & 0.74587 & 0.74581
-    \hline
+  \begin{tabular} {c c c}
+    \hline \\
+    Metric & Full network & LCC \\
+    \hline \\
+    Nodes & 11474 & 11203 \\
+    Edges & 170120 & 170080 \\
+    Radius & $\infty$ & 1 (122 default) \\
+    Diameter & $\infty$ & 2 \\
+    Clustering & 0.03297 & 0.03372 \\
+    Density & 0.00258 & 0.00271 \\
+    Degree assortativity & 0.17329 & 0.173 \\
+    Assort (SysGamGen) & 0.78194 & 0.7819 \\
+    Assort (Systems) & 0.74587 & 0.74581 \\
     \hline
   \end{tabular}
-  \caption{Network and LCC statistics.}
+  \caption{Network and LCC statistics calculated via NetworkX.}
   \label{tab:NetworkStats}
 \end{table}
 
-Preliminary results are rather interesting despite the limitations discussed above. The full weighted projection of the graph contains 11474 nodes and 170120 edges. The LCC, surprisingly, is barely reduced at 11203 nodes and 170080 edges (that is, only 40 edges smaller). In other words, data collection pulled hundreds of individuals who appeared repeatedly in the data (which is evident from the processing discussed earlier) who also responded to other users across topics enough to ensure that the network has a large LCC. LCC is not density or transitivity, but enumerating connected components helps observe connectedness. The connected components smaller than the LCC are all of a small length, such as one or two nodes with degrees of one.
+Preliminary results are rather interesting despite the limitations discussed above. The calculated statistics are available in table \ref{tab:NetworkStats}. The full weighted projection of the graph contains 11474 nodes and 170120 edges. The LCC, surprisingly, is barely reduced at 11203 nodes and 170080 edges (that is, only 40 edges smaller). In other words, data collection pulled hundreds of individuals who appeared repeatedly in the data (which is evident from the processing discussed earlier) who also responded to other users across topics enough to ensure that the network has a large LCC. LCC is not density or transitivity, but enumerating connected components helps observe connectedness. The connected components smaller than the LCC are all of a small length, such as one or two nodes with degrees of one.
 
 \begin{figure}[ht!]
   \centering
