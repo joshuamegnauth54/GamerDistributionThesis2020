@@ -25,11 +25,14 @@ Gaming is an omnipresent artistic medium enjoyed by a plurality of Americans. Re
 
 Ludology is as exciting as fields such as A.I. despite lacking the selfsame effervescence. In other words, ludology may be studied from many different angles. Political sociologists would find much to mine from the philosophical schisms in the gaming community. Recent grassroots movements to push for more representation in video games spawned a revanchist and sexist counter movement. Besides the political, sociologists may write ethnographies of the online communities or interactions that occur within gaming. Mark Chen's \textit{Leet Noob: The Life and Death of an Expert Player Group in 'World of Warcraft'} is a study of a group of gamers who tackle dungeons in \textit{World of Warcraft}. Chen writes from the perspective of both a gamer and a social scientist to apply theories such as social and cultural capital, actor-network theory, social construction, et cetera to the video game (\cite{chenwow}). The list above is clearly not exhaustive. However, I'd like to mention, as an aside, that online communities are transient; ignoring ludology risks permanently missing out on an aspect of culture.
 
-My thesis focusses on the intersection between network science via the social network Reddit and video games. I am particularly interested in the distribution of gamers across subreddits. Reddit and the related terminology will be explained below. I hypothesize that gamers are more likely to post on multiple gaming subreddits (that is, gamers are more likely to have a community that spans across subreddits). Analyzing the network dispersion of gamers is useful for both the social sciences as well as marketing. Network science is concerned with the spread of information by virtue of its focus on ties. Users who post on multiple subs may pass information across subreddits. The graph of gamers may be small world---that is, posters may be relatively well connected to rather than having to "travel" far across Reddit to encounter each other.
+My thesis focusses on the intersection between network science via the social network Reddit and video games. I am particularly interested in the distribution of gamers across subreddits as well as homophily. Reddit and the related terminology will be explained below. I hypothesize that gamers are more likely to post on multiple gaming subreddits (that is, gamers are more likely to have communities that span across subreddits). Analyzing the network dispersion of gamers is useful for both the social sciences as well as marketing. Network science is concerned with the spread of information by virtue of its focus on ties. Users who post on multiple subs may transfer information across subreddits. The graph of gamers may be small world---that is, posters may be relatively well connected to rather than having to "travel" far across Reddit to encounter each other.
 
-My guiding principle is thus to use my statistical and computing skill coupled with my domain knowledge of video games in order to contribute to ludology. Previous studies on gaming lack domain expertise while exhibiting logical fallacies---both of which seem to be caused by the hermetic world of academia. More proper ludology needs to seed the field until the study of video games resembles writing on music or films.
+My guiding principle is thus to use my statistical and computing skill coupled with my domain knowledge of video games in order to contribute to ludology. Previous studies on gaming lack domain expertise while exhibiting logical fallacies---both of which seem to be caused by the hermetic world of academia. More proper ludology needs to seed the field until the study of video games resembles writing on music or films. My project requires both scraping as well as analyzing data.
 
-An anecdote engendered my thesis. I've observed; anecdotally, like many others; that nerds of a feather tend to flock together. Gamers tend to share a sample from a common set of interests such as anime, wrestling, technology, certain tastes in music, et cetera. This observation is far from holistic---meaning, gamers do not adopt all of the same traits, and clearly not every person who watches wrestling, for example, is a gamer. However, the basic observation led to my thesis. My research is not seeking to answer that question specifically, but my thesis may provide the groundwork toward studying that larger topic. Gamers may preferentially attach to other gamers or to other ostensibly related subjects such as anime or eSports. Either conclusion---that gamers preferentially attach or not---is useful for ludology.
+An anecdote engendered my thesis. I've observed; anecdotally, like many others; that nerds of a feather tend to flock together. Gamers tend to share a sample from a common set of interests such as anime, wrestling, technology, certain tastes in music, et cetera. This observation is far from holistic---meaning, gamers do not adopt all of the same traits, and clearly not every person who watches wrestling, for example, is a gamer. However, the basic observation led to my thesis. Gamers may preferentially attach to other gamers or to other ostensibly related subjects such as anime or eSports. Either conclusion---that gamers preferentially attach or not---is useful for ludology. My research is not seeking to answer that question specifically, but my thesis may provide the groundwork toward studying that larger topic. My thesis specifically focusses on examining how gamers group together (or don't) based on related gaming subreddits.
+
+\section{Research question}
+How are gamers distributed across Reddit? Do gamers connect across subreddits on similar types of subreddits? My question, as mentioned above, aims to determine the shape of the "gamer network" on Reddit. Preliminary results have found that many gamers post across multiple gaming subreddits which may increase information dispersion. My research is limited in many ways due to time and computational constraints. Further research should seek to analyze a larger network with more similarity metrics. However, early research is encouraging in many ways as explained in the results and discussion sections.
 
 \section{Background: social network analysis}
 
@@ -89,6 +92,8 @@ Social network analysis is at least a century old, but big data presents new app
 Mark Granovetter's "Strength of Weak Ties" is a sociological classic that argues that micro level "interpersonal ties" affect macro level phenomena. Granovetter defines a small network consisting of two nodes, \textit{A} and \textit{B}, and their friends and acquaintances. Strong ties tend to create other strong ties. For example, \textit{A} and \textit{B}'s respective close ties would likely meet \textit{A} or \textit{B} as well. Nodes in a network transfer information so that our two nodes and their ties gain information from each other. As a small note, Granovetter uses "information" laxly to refer to anything that may be transmitted diffusely, such as knowledge or even disease (\cite{granovetter1973}).
 
 Information transfer is not limited to strong ties. Granovetter explains that weak ties act like "bridges" that create shortest paths for information to flow. Strong ties act as amplifiers that repeat and retain information. For example, consider \textit{A} and \textit{B}'s close ties. Rumors, jobs, feats of excellence or failure would all be retained within the strong ties of the network since information is constantly echoed throughout the clique. Weak ties, on the other hand, are "highways" that transmit information rapidly and across distances too. A network of only strong ties is isolated and disjointed. Granovetter uses several examples, including disease; we can consider COVID-19. The coronavirus spread through a series of coincidental ties that eventually made way into areas of stronger ties. In other words, COVID-19 couldn't spread through strong ties alone as that would be too slow. Weak ties diffuse information in general such as jobs, rumors, new ideas, et cetera. Discoveries or new inventions spread easier through networks containing a lot of weak ties due to the heterogeneity of such a network (\cite{granovetter1973}).
+
+Granovetter theorized that people with similar tastes have a pull to form ties. To repeat Granovetter, let's say that Node \textit{A} and \textit{B} are friends and node \textit{C} is friends with \textit{A} but not \textit{B}. Nodes \textit{B} or \textit{C} would be compelled to form ties with each other (\cite{granovetter1973}).
 
 Reddit is strongly attuned to the idea of weak ties. Redditors likely do not post in subreddits consisting of only close ties. Strangers, or at least mild acquaintances, hold topics and discussions on Reddit. Posters may recognize certain Redditors over time, but the connection is still tangential rather than strong. The "velocity" and "volume" of information produced on Reddit facilitates creating weak links as well as information transfer. Some critics contend that the power of weak ties is often exaggerated. Weak ties require some strength behind them to have effect rather than having an effect by default (\cite{kadushin2011}). Reddit's weak ties have some force behind them due to the focus on discussions. For example, many topics hold in depth conversations on music, films, video games, politics, relationships, computers, et cetera. New games or albums may rapidly traverse the relevant areas of Reddit if popular enough. Such mechanisms operate on Twitter too, of course, but Reddit is specifically geared toward longer communication which in turn holds more power than a couple of characters. Reddit, unlike Twitter, is not full of fake users and bots that hinder rather than improve connectivity.
 
@@ -262,7 +267,7 @@ Notably, other authors, such as Cauteruccio et alia, ran into computational issu
 \end{table}
 Like all data my network required processing and cleaning. Likewise, data processing should be disclosed for reproducibility. I pruned my network by removing nodes that appear less than three times. The value three is somewhat arbitrary as I intended to maximize the number of observations kept while removing a good chunk of the noise. A threshold of three did not shrink the network unreasonably; the majority of the data remained and manageability increased.
 
-Next, subreddits were divided into two assortativity measures shown in \ref{tab:AssortSplit}. The subs themselves were compiled in large part based on Mike Sizz's Reddit List by manually selecting the top gaming subs (\cite{redditlist}). Prior knowledge guided creating the assortativity classes. Separating the subreddits by \textit{Systems, Games, and General} or each console feels naturalistic. \textit{Systems, Games, and General} classifies subreddits by whether they refer to a system (such as all subs for all consoles or P.C.s), relate to a game, or are about general purpose gaming. The \textit{Systems} distinction is similarly natural. Some subreddits are simply more associated with a specific console or company than others. For example, Mario, Zelda, Animal Crossing, Metroid, et alia are Nintendo only series. I took some liberties with series that are generally associated with a platform but have only recently become multiplatform. The Yakuza series is a quintessential PlayStation series. However, Sega recently (2019 and beyond) ported the series to P.C. Likewise, Halo is an Xbox series that 343 Industries recently ported to P.C. (2018\footnote{For the \textit{Master Chief Collection}. The first two Halo games had older P.C. ports, but Halo was still commonly thought of as an Xbox series.}) I classified these two series under their respective original platforms due to data limitations. Data limitations affect classifications in other ways as well. Gathering even more subreddits would open more potential classes. For example, perhaps genres and games would be a viable metric if I were able to scrape more data.
+Next, subreddits were divided into two assortativity or similarity measures shown in \ref{tab:AssortSplit}. The subs themselves were compiled in large part based on Mike Sizz's Reddit List by manually selecting the top gaming subs (\cite{redditlist}). Prior knowledge guided creating the assortativity classes. Nodes are assigned based on the sub that they posted in most frequently. Separating the subreddits by \textit{Systems, Games, and General} or each console feels naturalistic. \textit{Systems, Games, and General} classifies subreddits by whether they refer to a system (such as all subs for all consoles or P.C.s), relate to a game, or are about general purpose gaming. The \textit{Systems} distinction is similarly natural. Some subreddits are simply more associated with a specific console or company than others. For example, Mario, Zelda, Animal Crossing, Metroid, et alia are Nintendo only series. I took some liberties with series that are generally associated with a platform but have only recently become multiplatform. The Yakuza series is a quintessential PlayStation series. However, Sega recently (2019 and beyond) ported the series to P.C. Likewise, Halo is an Xbox series that 343 Industries recently ported to P.C. (2018\footnote{For the \textit{Master Chief Collection}. The first two Halo games had older P.C. ports, but Halo was still commonly thought of as an Xbox series.}) I classified these two series under their respective original platforms due to data limitations. Data limitations affect classifications in other ways as well. Gathering even more subreddits would open more potential classes. For example, perhaps genres and games would be a viable metric if I were able to scrape more data.
 
 \subsection{Graph projection}
 
@@ -276,7 +281,9 @@ My code is fully available on GitHub as well as my data for replicability. The f
 
 I calculated radius, diameter, average clustering, density, degree assortativity, and assortativity for SysGamGen and Systems using NetworkX. Radius and diameter revolve around the idea of eccentricity or the distance between a vertex, v, and the set of all vertices in a graph. The radius (or center) is the set of nodes with minimum eccentricity while diameter consists of the nodes with maximum eccentricity. Radius and diameter measure closeness. The radius of a network would show the nodes which are closest to all other nodes. For my network, radius and diameter are interesting in terms of potential information dispersion. Central posters may reach other users more easily whereas nodes in the diameter may be more difficult to reach. Betweenness and closeness centrality are both ideal metrics that are unfortunately impossible to calculate due to the limitations mentioned above.
 
-Average clustering is the ratio of observed triangles to total possible triangles. A triangle, or triad, 
+Average clustering is the ratio of observed triangles to total possible triangles. A triangle, or triad, is a relationship where three nodes share edges so that they are all connected and form a triangle. Triangles are important in terms of social ties as Granovetter argued as people tend to form triads based on similar tastes and feelings. Density is a related statistic that measures the ratio of observed edges to the count of possible edges. A dense network is well connected due to the amount of existing edges. Large scale online social networks are likely to be more sparsely connected due to the diversity of communities as well and their spread. High densities are not always desirable.
+
+Assortativity (or homophily) is the tendency for nodes to connect to nodes alike in some way as briefly mentioned above. For example, gamers with PlayStation may be more likely to post on subreddits related to PlayStation or PlayStation games. I calculated degree assortativity and attribute assortativity using NetworkX. Degree assortativity is homophily based on similar degree or amount of connections. Attribute assortativity is the concept mentioned above where nodes are tested on their connectivity based on a quality held in common.
 
 \subsection{Random graph replicates}
 
@@ -286,6 +293,9 @@ I calculated p-values via random graph replicates using the process defined in \
 * Project graph to mimic the observed network
 * Calculate a statistic using that projected graph
 * Repeat the steps above 10000 times using multiprocessing to speed up calculations
+* Repeat for each of the desired statistics
+
+The steps above produced 10000 replicates of average clustering, density, degree assortativity, and attribute assortativity on SysGamGen.
 
 \section{Results}
 \begin{table}[ht!]
@@ -295,19 +305,82 @@ I calculated p-values via random graph replicates using the process defined in \
     Metric & Full network & LCC
     Nodes & 11474 & 11203
     Edges & 170120 & 170080
-    Radius & N/A & 6
-    Diameter & N/A & 11
-    Clustering
-    Density
-    Degree assortativity
-    Assort (SysGamGen)
-    Assort (Systems)
+    Radius & \infty & 1 (122 default)
+    Diameter & \infty & 2
+    Clustering & 0.03297 & 0.03372
+    Density & 0.00258 & 0.00271
+    Degree assortativity & 0.17329 & 0.173
+    Assort (SysGamGen) & 0.78194 & 0.7819
+    Assort (Systems) & 0.74587 & 0.74581
     \hline
     \hline
   \end{tabular}
   \caption{Network and LCC statistics.}
   \label{tab:NetworkStats}
 \end{table}
+
+Preliminary results are rather interesting despite the limitations discussed above. The full weighted projection of the graph contains 11474 nodes and 170120 edges. The LCC, surprisingly, is barely reduced at 11203 nodes and 170080 edges (that is, only 40 edges smaller). In other words, data collection pulled hundreds of individuals who appeared repeatedly in the data (which is evident from the processing discussed earlier) who also responded to other users across topics enough to ensure that the network has a large LCC. LCC is not density or transitivity, but enumerating connected components helps observe connectedness. The connected components smaller than the LCC are all of a small length, such as one or two nodes with degrees of one.
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=\textwidth]{network_degcent.png}
+  \caption{Full network with node sizes determined by degree centrality.}
+  \label{fig:fullnet}
+\end{figure}
+
+Visualizing the full network clearly shows these disconnected nodes. The full visualization also shows the high assortativity of the SysGamGen attribute. We may observe the high connectivity as well as the diversity of edges from the plot as well. The nodes seem reasonably grouped within their assortativity class. Assortativity is 0.78 for SysGamGen and 0.75 for Systems. Both metrics are very high which \textit{may} indicate homophily in terms of sticking to the subs as they were assigned in the categories. However, as noted in limitations, the original breadth first search idea was scrapped due to computational limitations as the data grows. The high assortativity may be tautological because I lack the full picture of where those nodes posted. In other words, assortativity may be lower if data on non-gaming subs in terms of the node set were gathered. Those data would provide subs outside of the immediate gaming sphere to act as a check.
+
+Degree assortativity is about 0.173 which is low but positive. A high correlation for degree assortativity would mean that posters tend to cluster near other Redditors with a similar degree. Thus, posters with a high degree would be expected to post in the same topics as other posters with high degrees and vice versa. The low correlation shows that degree assortativity is fairly infrequent yet not completely random. A low but nonzero correlation is sensible as some assortativity on degree is expected. For example, Redditors who post more have a greater chance of appearing in the data and likely have a higher degree which in turn means they're more likely to connect to people with other high degrees.
+
+Density and average clustering are both low at 0.0026 and 0.033 respectively. Neither of these statistics were likely to be very high. Online social networks tend to be very dispersed rather than tightly woven. A high density would mean most Redditors responded to most posts---clearly impossible. However, low density is more conducive to information spread in terms of weak ties. Density measures connectedness which is orthogonal to information diversity. Connectivity is important (such as having an average shortest path length that isn't prohibitive to information flow), but high connectedness is not always necessary. Density is important to the extent that nodes are not isolated.
+
+As a side note, the observed statistics were all completely outside of the boundaries of the calculated distribution of replicates. Thus, the probability of obtaining a statistic at least as extreme as what was observed is about 0 (up to 10000 replicates). P-values are not necessarily important, and low probabilities may have been a result of the algorithm used to generate the random graphs.
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=\textwidth]{metrics_dist.png}
+  \caption{Distribution of random graph replicates.}
+  \label{fig:metricsdist}
+\end{figure}
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=\textwidth]{metrics_dist_w_obs.png}
+  \caption{Replicates with observed statistic.}
+  \label{fig:metricwobs}
+\end{figure}
+
+Both the limitations and promise of my study are demonstrated by radius and diameter. The Barycenter algorithm finds a single node in the radius while the default NetworkX center function finds 122. My data collection methodology pulled many Redditors who posted multiple times across different subs. The node with the highest unique amount of subreddits posted in at least 19 different video game related subs based on the data. NetworkX's center function detects posters who seem to be at an intersection of subreddits. One node posted in the Halo, Fall Guys, Xbox One, and Nintendo Switch subs. Fall Guys is a video game that is \textit{not} on Xbox One or the Switch. Likewise, Halo is not on the Switch. This diversity of subs likely means this node is relatively closer to other nodes (low eccentricity). Another node posted in each of the PlayStation subreddits as well as P.C. gaming's sub. Other nodes seem to have simply been lucky enough to post in pivotal topics that ensured they were closer to a variety of other nodes with connections to other subs.
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=\textwidth]{network_diarad.png}
+  \caption{Diameter and radius.}
+  \label{fig:diarad}
+\end{figure}
+
+The Barycenter algorithm only finds a single node in the center. Unsurprisingly, the node with the lowest eccentricity posted in 16 different video game related subreddits multiple times---and, again unsurprisingly, the subs were rather diverse. This user posted in subs associated with multiplatform gaming, P.C. gaming, games that are platform specific, as well as a couple of the humor related subs I included in my scrape. The node is not the most prevalent in my data set. In fact, many nodes occur more frequently than the node found by Barycenter. The node which appears most frequently posted 169 times. However, our most prevalent node only ever posted in the subreddit for the video game Bloodborne which is a PlayStation 4 exclusive. Bloodborne may be well received, but posting on a sub for one game that is a platform exclusive is unlikely to result in a lower eccentricity. As one would expect, the Bloodborne poster is not in the center found by the default algorithm either. While shortest path tests are too computationally expensive for my data, analyzing the center shows some evidence for information being reachable rather than more rigidly segmented.
+
+The periphery or diameter consists of two nodes that posted a handful of times in only one subreddit. One node only posted in the Rocket League subreddit while another node only posted in the PlayStation 4 subreddit. Rocket League is a very popular competitive game which is essentially soccer with cars. The topics these two Redditors posted on have a few comments; I'll refer to these as "diameter's topics" for the rest of this paragraph. The maximum eccentricity of the graph is 11. The Redditors who posted on the diameter's topics all have eccentricities of ten. The posters on the diameter's topics, possibly due to the data's limitations, are all relatively far from the other nodes.
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=\textwidth]{network_k_core_50_80.png}
+  \caption{K-core decomposition for k 50 to 80.}
+  \label{fig:kcore50_80}
+\end{figure}
+
+The k-core of a graph is a decomposition where nodes who don't meet a threshold for degree (k) are iteratively removed. The visualization above shows the k-core decomposition of the graph for k = $\{50, 60, 70, 80\}$. The graph is strongly and diversely connected despite the low density discussed earlier. A graph consisting of more data is likely to exhibit an even stronger k-core due to having more connections of course. At k = 70 and k = 80 we may notice that we have a handful of nodes that connect major sections of the decomposed graph. In both the decomposition as well as the full graph those nodes are likely to have a high betweenness centrality.
+
+\section{Discussion}
+The metrics calculated above provide evidence for the high reachability of information in the gamer's network. One way to consider this concept would be the idea of a "small world" or low hops to reach information. The small world characteristic engenders statements such as "I am six steps or less away from Obama." However, considering hops does not account for reachability. Perhaps hops two and three are far more difficult to reach than hop one on a person's quest to Obama. Network hops are likely more deterministic. For example, internet hops through routes to a web server are far different than human hops like in the Obama case. Online social networks such as Reddit are likely somewhere in between. Let's consider the node that posted in the Halo, Fall Guys, Xbox One, and Switch subs. Another Redditor, \textit{A}, who requests information that is very specific to that person's (\textit{B}) information set is more likely to receive it from \textit{B} than someone is to being connected to a stranger via the degrees of separation. The reason is that the barrier to receiving than information is far lower than the barrier to hopping human nodes through "real" connections. A person simply must ask the question in a place where a node with the requisite information set may see it. While this seems difficult when phrased that way, that just means that a node has to ask, say, some question related to Fall Guys and Xbox\footnote{Which to reiterate I realize is not on Xbox yet.} in either subreddit for example.
+
+The limitations encountered engenders a cautious discussion. Assortativity likely requires more data so that more attributes may be designed and tested. The two attributes tested show high assortativity but a comparative approach would be superior for my research question.
+
+\subsection{Future research}
+Future research would ideally analyze much more data. My data gathering process precluded the text of the posts and topic names were encoded for privacy. However, text data, including posts and topic names, could be used for topic analysis whereby the "subjects" of each post or topic could be pulled out to use in assortativity. As mentioned earlier, more data would also mean a fuller network where more gamers can be compared across more subreddits. About a quarter of my small sample posted on at least two different subreddits, so gathering more data would likely magnify this trend. A breadth first search would result in a graph of gamers plus their posts in subreddits outside of video games. Essentially the data would consist of two separate graphs which would allow comparing the connections between gamers within gaming subreddits as well as possible connections outside of gaming subs. Finally, future research could also compare the gamer graph to graphs of music fans, sports wonks, film buffs, et cetera. Perhaps gamers are more connected across subs than Redditors interested in other topics.
+
+Subreddits for film series as well as individual bands, musicians, and genres exist. However, none of the subreddits for these topics beyond the major subs seem to come close to gaming's efficacy. Regardless, studying a large graph of music subs comparatively with a large graph of gaming subs seems like the best step toward improving my research. A quick check shows that the subreddits for indie bands link to other indie bands as well as more encompassing subs. The subreddit for the band King Crimson links to several well known prog rock and metal subreddits as well as subs for related genres such as post-rock. However, none of these subreddits have many subscribers especially when compared to even the smaller subs gathered for this thesis.
 
 \printbibliography
 

@@ -57,15 +57,17 @@ def test_small(N):
 
 # Lots of duplicated code. Oops. I realized I like how I did it for 790.
 def draw_and_save(projection, gamers_df, path="../../assets/",
-                  k_range=range(8, 16, 4)):
+                  k_range=range(50, 90, 10)):
     print("Drawing graph augmented with degree centrality.")
     fig, ax, _ = draw_degree_centrality(projection, alpha=0.6)
 
     # Add legend and title
-    add_network_leg(fig, ax, "Size = degree centrality",
-                    [("#ff79c6", "Systems/consoles"),
-                     ("#50fa7b", "Games or game series"),
-                     ("#8be9fd", "Miscellaneous")])
+    col_labels=[("#ff79c6", "Systems/consoles"),
+                ("#50fa7b", "Games or game series"),
+                ("#8be9fd", "Miscellaneous")]
+    add_network_leg(fig, ax,
+                    suptitle="Size = degree centrality",
+                    col_labels=col_labels)
 
     # Save the rendered network.
     fig.savefig(path + "network_degcent.png", bbox_inches="tight")
@@ -74,15 +76,31 @@ def draw_and_save(projection, gamers_df, path="../../assets/",
     print("Calculating largest connected component.")
     lcc = largest_connected_component(projection)
     print("Drawing diameter and radius.")
-    fig, ax = draw_diameter_radius(lcc)
+    fig, ax = draw_diameter_radius(lcc, barycenter=False)
+    add_network_leg(fig, ax, suptitle="Diameter/radius of gamers network",
+                    col_labels=[("#ff5555", "Radius"),
+                                ("#f1fa8c", "Diameter"),
+                                ("#8be9fd", "Neither")])
     fig.savefig(path + "network_diarad.png", bbox_inches="tight")
 
-    for k_min in k_range:
-        k_max = k_min + 4
-        print("Drawing k core for k {} -> {}".format(k_min, k_max))
-        fig, ax = draw_k_core_decompose(projection, range(k_min, k_max))
-        fig.savefig(path + "network_k_core_{}_{}.png".format(k_min, k_max),
-                    bbox_inches="tight")
+    print("Drawing k core for k {} -> {}".format(min(k_range), max(k_range)))
+    # I'm overriding the color here because it ends up too overbearing
+    # for k = 70, 80
+    fig, ax = draw_k_core_decompose(projection, k_range,
+                                    edge_color=["sub_color",
+                                                "sub_color",
+                                                "#44475a",
+                                                "#44475a"])
+    add_network_leg(fig, ax[0][0],
+                suptitle="K-core decomposition of gamers network",
+                legend=False)
+
+    for k_ax, k in zip(ax.flat, k_range):
+        add_network_leg(fig, k_ax, "k = {}".format(k),
+                        col_labels=None, legend=False)
+    fig.savefig(path + "network_k_core_{}_{}.png".format(min(k_range),
+                                                         max(k_range)),
+                bbox_inches="tight")
 
     print("Calculating average clustering replicates.")
     N_reps = 10000
@@ -130,6 +148,15 @@ def draw_and_save(projection, gamers_df, path="../../assets/",
                              "Assortativity on Systems, Games, & General"],
                             plot_p=False)
     fig.savefig(path + "metrics_dist_w_obs.png", bbox_inches="tight")
+
+    print("Drawing ego graph.")
+    dc = sorted(nx.degree_centrality(projection).items(),
+                key=lambda n: n[1], reverse=True)
+    fig, ax, _ = draw_degree_centrality(nx.ego_graph(projection, dc[0][0]))
+    add_network_leg(fig, ax,
+                    suptitle="Size = degree centrality",
+                    col_labels=col_labels)
+    fig.savefig(path + "ego_graph_dc.png", bbox_inches="tight")
 
 
 def print_useful_metrics(projection, attributes=None):

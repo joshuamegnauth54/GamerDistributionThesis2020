@@ -62,6 +62,34 @@ def draw_degree_centrality(gamers, offset=10000, color="SysGamGen",
 
 def draw_k_core_decompose(gamers, k_range=range(8, 16), color="SysGamGen",
                           edge_color="sub_color", **kwargs):
+    """Draw the k core of gamers through k_range.
+
+    Parameters
+    ----------
+    gamers : networkx.Graph
+        Graph to plot.
+    k_range : Range, optional
+        Range of k to plot. The default is range(8, 16).
+    color : str, optional
+        Color attribute of gamers or hex color. The default is "SysGamGen".
+    edge_color : str or List[str], optional
+        Color attribute of gamers or hex color or list of either. If a list is
+        passed then the length must match k as each k will be associated with
+        a list element.
+        The default is "sub_color".
+    **kwargs : TYPE
+        Keywork arguments to pass down the stack.
+
+    Returns
+    -------
+    fig : TYPE
+        DESCRIPTION.
+    axes : TYPE
+        DESCRIPTION.
+
+    """
+
+    # Row/col thingy is broken.
     row = (int(len(k_range)/2)
            if ~(len(k_range) % 2) else 1 + int(len(k_range)/2))
     col = (int(len(k_range)/2)
@@ -70,18 +98,21 @@ def draw_k_core_decompose(gamers, k_range=range(8, 16), color="SysGamGen",
     # I want a large figure because this looks terrible if too small.
     fig, axes = plt.subplots(row, col, figsize=(22, 22))
 
-    for ax, k in zip(axes.flat, k_range):
+    if isinstance(edge_color, str):
+        edge_color = np.repeat(edge_color, len(k_range))
+
+    for ax, k, ecolor in zip(axes.flat, k_range, edge_color):
         decomposed = nx.k_core(gamers, k)
 
         # Ignoring return values since they're the same fig, ax I passed in.
-        draw_gamers(decomposed, color=color, edge_color=edge_color,
+        draw_gamers(decomposed, color=color, edge_color=ecolor,
                     fig=fig, ax=ax, **kwargs)
 
     return fig, axes
 
 
-def draw_diameter_radius(lcc, cent_offset=4096, peri_offset=1024,
-                         default_offset=32):
+def draw_diameter_radius(lcc, cent_offset=2048, peri_offset=1024,
+                         default_offset=128, barycenter=True):
     """Draw the barycenter and periphery of the gamer network.
 
     Parameters
@@ -100,15 +131,19 @@ def draw_diameter_radius(lcc, cent_offset=4096, peri_offset=1024,
     (matplotlib.pyplot.figure, matplotlib.pyplot.Axes)
         Figure/ax of plot.
     """
-    # Barycenter centrality is normalized by accounting for the total network.
-    center = nx.barycenter(lcc, weight="weight")
+    if barycenter:
+        # Barycenter centrality is normalized by accounting for the total
+        # network.
+        center = nx.barycenter(lcc, weight="weight")
+    else:
+        center = nx.center(lcc)
     periphery = nx.periphery(lcc)
 
-    # Nodes outside of the radius/diameter are pink. The center is red and
+    # Nodes outside of the radius/diameter are green. The center is red and
     # the periphery is yellow.
     nx.set_node_attributes(lcc, {node: "#ff5555" if node in center
                                  else "#f1fa8c" if node in periphery
-                                 else "#ff79c6"
+                                 else "#8be9fd"
                                  for node in lcc.nodes()},
                            "CentPeri")
 
@@ -121,7 +156,7 @@ def draw_diameter_radius(lcc, cent_offset=4096, peri_offset=1024,
 
     # Plot and return (fig, ax)
     return draw_gamers(lcc, color="CentPeri", edge_color="sub_color",
-                       size=size)
+                       size=size, alpha=0.6)
 
 
 def draw_lollypop(counts_df, suptitle):
@@ -155,7 +190,8 @@ def draw_lollypop(counts_df, suptitle):
     return fig, ax
 
 
-def add_network_leg(fig, ax, title, col_labels, loc="upper left"):
+def add_network_leg(fig, ax, title=None, suptitle=None, col_labels=None,
+                    loc="upper left", legend=True):
     """ Convenience function to add a legend and title to the network plots.
 
     Parameters
@@ -164,44 +200,57 @@ def add_network_leg(fig, ax, title, col_labels, loc="upper left"):
         Figure associated with ax.
     ax : matplotlib.axes._subplots.AxesSubplot
         Axes associated with fig.
-    title : str
+    title : str, optional
         Title to set for ax.
-    col_labels : (str, str)
-        Tuple of (color, label) for each legend item.
+    suptitle : str, optional
+        Title to set for figure.
+    col_labels : (str, str), optional
+        Tuple of (color, label) for each legend item. Required for legend.
     loc : str, optional
         Location of the legend. Check matplotlib's docs.
         The default is "upper left".
+    legend: bool, optional
+        Add a legend. Requires col_labels.
 
     Returns
     -------
     None.
 
     """
-
     # The frame looks nice for subplots but yucky and weird with the title.
     ax.set_frame_on(False)
-    ax.set_title(title,
-                 fontdict={"fontsize": 24,
-                           "color": "#f8f8f2",
-                           "fontweight": "bold"})
-    # Manual legend creation
-    # Patches are used to represent each color present
-    handles = []
-    for pair in col_labels:
-        patch = Patch(color=pair[0])
-        patch.set_label(pair[1])
-        handles.append(patch)
 
-    # Upper left is a good default for the legend
-    ax.legend(handles=handles,
-              loc=loc,
-              fontsize=14,
-              facecolor="#282a36",
-              edgecolor="#44475a",
-              frameon=False)
+    if suptitle:
+        fig.suptitle(suptitle,
+                     fontsize=32,
+                     color="#f8f8f2",
+                     fontweight="bold")
 
-    # Manually setting the font color for the legend as the default is too
-    # dark
-    legend = ax.get_legend()
-    for lab in legend.get_texts():
-        lab.set_color("#f8f8f2")
+    if title:
+        ax.set_title(title,
+                     fontdict={"fontsize": 24,
+                               "color": "#f8f8f2",
+                               "fontweight": "bold"})
+
+    if legend:
+        # Manual legend creation
+        # Patches are used to represent each color present
+        handles = []
+        for pair in col_labels:
+            patch = Patch(color=pair[0])
+            patch.set_label(pair[1])
+            handles.append(patch)
+
+        # Upper left is a good default for the legend
+        ax.legend(handles=handles,
+                  loc=loc,
+                  fontsize=14,
+                  facecolor="#282a36",
+                  edgecolor="#44475a",
+                  frameon=False)
+
+        # Manually setting the font color for the legend as the default is too
+        # dark
+        legend = ax.get_legend()
+        for lab in legend.get_texts():
+            lab.set_color("#f8f8f2")
