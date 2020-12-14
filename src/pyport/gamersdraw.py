@@ -112,7 +112,8 @@ def draw_k_core_decompose(gamers, k_range=range(8, 16), color="SysGamGen",
 
 
 def draw_diameter_radius(lcc, cent_offset=2048, peri_offset=1024,
-                         default_offset=128, barycenter=True):
+                         default_offset=128, edge_color="sub_color",
+                         barycenter=True):
     """Draw the barycenter and periphery of the gamer network.
 
     Parameters
@@ -131,13 +132,16 @@ def draw_diameter_radius(lcc, cent_offset=2048, peri_offset=1024,
     (matplotlib.pyplot.figure, matplotlib.pyplot.Axes)
         Figure/ax of plot.
     """
+    # Avoid recalculating eccentricity
+    lcc_ecc = nx.eccentricity(lcc)
+
     if barycenter:
         # Barycenter centrality is normalized by accounting for the total
         # network.
         center = nx.barycenter(lcc, weight="weight")
     else:
-        center = nx.center(lcc)
-    periphery = nx.periphery(lcc)
+        center = nx.center(lcc, lcc_ecc)
+    periphery = nx.periphery(lcc, lcc_ecc)
 
     # Nodes outside of the radius/diameter are green. The center is red and
     # the periphery is yellow.
@@ -192,7 +196,7 @@ def draw_lollypop(counts_df, suptitle):
 
 def add_network_leg(fig, ax, title=None, suptitle=None, col_labels=None,
                     loc="upper left", legend=True):
-    """ Convenience function to add a legend and title to the network plots.
+    """Convenience function to add a legend and title to the network plots.
 
     Parameters
     ----------

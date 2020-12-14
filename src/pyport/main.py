@@ -152,9 +152,10 @@ def draw_and_save(projection, gamers_df, path="../../assets/",
     print("Drawing ego graph.")
     dc = sorted(nx.degree_centrality(projection).items(),
                 key=lambda n: n[1], reverse=True)
-    fig, ax, _ = draw_degree_centrality(nx.ego_graph(projection, dc[0][0]))
+    fig, ax, _ = draw_degree_centrality(nx.ego_graph(projection, dc[0][0]),
+                                        alpha=0.6)
     add_network_leg(fig, ax,
-                    suptitle="Size = degree centrality",
+                    suptitle="Ego graph of highest degree cent",
                     col_labels=col_labels)
     fig.savefig(path + "ego_graph_dc.png", bbox_inches="tight")
 

@@ -6,7 +6,7 @@ from collections.abc import Iterable
 
 
 def p_value_plots(observed, replicates, labels, plot_obs=True, plot_p=True,
-                  figsize=(20, 20)):
+                  figsize=(20, 20), suptitle=None):
 
     # Replicates needs to be an array of arrays.
     # Observed and labels must be arrays.
@@ -51,8 +51,9 @@ def p_value_plots(observed, replicates, labels, plot_obs=True, plot_p=True,
     # Figure misc. These are better to set after plotting.
     fig.patch.set_facecolor("#282a36")
     fig.tight_layout()
-    fig.suptitle("Random graph replicates of network measures{}".format(
-        " + observed in red" if plot_obs else ""),
-        fontsize=36, fontweight="bold", color="#f8f8f2", y=1.05)
+    fig.suptitle(suptitle if suptitle else
+                 "Random graph replicates of network measures{}".format(
+                     " + observed in red" if plot_obs else ""),
+                 fontsize=36, fontweight="bold", color="#f8f8f2", y=1.05)
 
     return fig, axes
