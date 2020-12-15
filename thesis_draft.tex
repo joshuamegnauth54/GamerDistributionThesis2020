@@ -13,8 +13,8 @@
 \usepackage{subcaption}
 \graphicspath{{./assets/}}
 
-\title{Thesis draft}
-\author{Joshua Megnauth}
+\title{Cross-posting gamers on Reddit: An analysis of the gamer community}
+\author{Joshua Megnauth\\[1cm]{\small Advised by Dr. Charles J. Gomez}\\[1cm]{\small Queens College, City University of New York}}
 \date{\today}
 
 \begin{document}
@@ -155,7 +155,7 @@ The researchers found that algorithms like Google's PageRank perform poorer than
 
 K-core outperformed other algorithms based on the findings by Pei et alia. Metrics such as K-core or eigenvector centrality are global metrics that require complete networks to be properly calculated. Studying online social networks such as Reddit, Twitter, or Facebook is thus extremely difficult or perhaps impossible unless a clear subset is demarcated. Thus, they collected the entirety of the LiveJournal network in order to both circumvent the errors caused by simulated data as well as the difficulty of studying influence in other online social networks (\cite{peispread2014}).
 
-Gathering the entire LiveJournal (LJ) network allowed the researchers to track information diffusion globally. In other words, the researchers were able to follow every link made by a user to an LJ blog other than their own. Starting with a user, \textit{i}, the researchers followed the chain of users who linked to posts by \textit{i} as well as users who linked to the links et cetera. The method accounts for every user rather than conferring importance on whichever users the algorithm picked as a starting point. The result is the influence of every user whose content was shared. K-core outperforms PageRank which works via a random walk. Random walks may work for ranking website links but performs suboptimally for social networks (\cite{peispread2014}).
+Gathering the entire LiveJournal (LJ) network allowed the researchers to track information diffusion globally. In other words, the researchers were able to follow every link made by a user to an LJ blog other than their own. Starting with a user, \textit{i}, the researchers followed the chain of users who linked to posts by \textit{i} as well as users who linked to the links et cetera. The method accounts for every user rather than conferring importance on whichever users the algorithm picked as a starting point. The result is the influence of every user whose content was shared. K-core outperforms PageRank for the LJ data. PageRank incorporates a random walk. Random walks may work for ranking website links but for social networks performance is suboptimal (\cite{peispread2014}).
 
 \section{Methodology}
 
@@ -291,11 +291,13 @@ Assortativity (or homophily) is the tendency for nodes to connect to nodes alike
 
 I calculated p-values via random graph replicates using the process defined in \textbf{randomnet.py}. Process:
 
-* Generate a random bipartite graph with the same number of top nodes, bottom nodes, and edges as my \textbf{unprojected} graph
-* Project graph to mimic the observed network
-* Calculate a statistic using that projected graph
-* Repeat the steps above 10000 times using multiprocessing to speed up calculations
-* Repeat for each of the desired statistics
+\begin{enumerate}
+  \item Generate a random bipartite graph with the same number of top nodes, bottom nodes, and edges as my \textbf{unprojected} graph
+  \item Project graph to mimic the observed network
+  \item Calculate a statistic using that projected graph
+  \item Repeat the steps above 10000 times using multiprocessing to speed up calculations
+  \item Repeat for each of the desired statistics
+\end{enumerate}
 
 The steps above produced 10000 replicates of average clustering, density, degree assortativity, and attribute assortativity on SysGamGen.
 
@@ -382,7 +384,7 @@ The limitations encountered engenders a cautious discussion. Assortativity likel
 \subsection{Future research}
 Future research would ideally analyze much more data. My data gathering process precluded the text of the posts and topic names were encoded for privacy. However, text data, including posts and topic names, could be used for topic analysis whereby the "subjects" of each post or topic could be pulled out to use in assortativity. As mentioned earlier, more data would also mean a fuller network where more gamers can be compared across more subreddits. About a quarter of my small sample posted on at least two different subreddits, so gathering more data would likely magnify this trend. A breadth first search would result in a graph of gamers plus their posts in subreddits outside of video games. Essentially the data would consist of two separate graphs which would allow comparing the connections between gamers within gaming subreddits as well as possible connections outside of gaming subs. Finally, future research could also compare the gamer graph to graphs of music fans, sports wonks, film buffs, et cetera. Perhaps gamers are more connected across subs than Redditors interested in other topics.
 
-Subreddits for film series as well as individual bands, musicians, and genres exist. However, none of the subreddits for these topics beyond the major subs seem to come close to gaming's efficacy. Regardless, studying a large graph of music subs comparatively with a large graph of gaming subs seems like the best step toward improving my research. A quick check shows that the subreddits for indie bands link to other indie bands as well as more encompassing subs. The subreddit for the band King Crimson links to several well known prog rock and metal subreddits as well as subs for related genres such as post-rock. However, none of these subreddits have many subscribers especially when compared to even the smaller subs gathered for this thesis.
+Subreddits for film series as well as individual bands, musicians, and genres exist. However, none of the subreddits for these topics beyond the major subs seem to come close to gaming's efficacy. Regardless, studying a large graph of music subs comparatively with a large graph of gaming subs seems like the best step toward improving my research. The alternative graphs may function as a stronger null model in addition to the weaker p-values. A quick check shows that the subreddits for indie bands link to other indie bands as well as more encompassing subs. The subreddit for the band King Crimson links to several well known prog rock and metal subreddits as well as subs for related genres such as post-rock. However, none of these subreddits have many subscribers especially when compared to even the smaller subs gathered for this thesis.
 
 \printbibliography
 

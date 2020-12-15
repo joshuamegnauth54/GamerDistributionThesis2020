@@ -120,19 +120,26 @@ def draw_diameter_radius(lcc, cent_offset=2048, peri_offset=1024,
     ----------
     lcc : networkx.Graph
         Largest connected component of the gamers network projection.
-    cent_offset : int
-        Size offset for center nodes.
-    peri_offset : int
-        Size offset for periphery nodes.
-    default_offset : int
-        Size offset for all other nodes.
+    cent_offset : int, optional
+        Size offset for center nodes. Default is 2048.
+    peri_offset : int, optional
+        Size offset for periphery nodes. Default is 1024.
+    default_offset : int, optional
+        Size offset for all other nodes. Default is 128.
+    edge_color : str, optional
+        Attribute containing edge color or the color itself. Default is
+        sub_color.
+    barycenter : boolean, optional
+        Whether to use the barycenter algorithm for radius or the default
+        algo. Default is True.
 
     Returns
     -------
     (matplotlib.pyplot.figure, matplotlib.pyplot.Axes)
         Figure/ax of plot.
     """
-    # Avoid recalculating eccentricity
+    # Avoid recalculating eccentricity. We'll need an eccentricity dictionary
+    # at least once.
     lcc_ecc = nx.eccentricity(lcc)
 
     if barycenter:
@@ -159,11 +166,28 @@ def draw_diameter_radius(lcc, cent_offset=2048, peri_offset=1024,
             for node in lcc.nodes()]
 
     # Plot and return (fig, ax)
-    return draw_gamers(lcc, color="CentPeri", edge_color="sub_color",
+    return draw_gamers(lcc, color="CentPeri", edge_color=edge_color,
                        size=size, alpha=0.6)
 
 
 def draw_lollypop(counts_df, suptitle):
+    """Draw a lollypop plot of counts_df.
+
+    Parameters
+    ----------
+    counts_df : pandas.Series
+        Series where index is the names and the values are something we'd want
+        to turn into a lollypop.
+    suptitle : str
+        Suptitle of plot.
+
+    Returns
+    -------
+    fig : matplotlib.figure.Figure
+        Figure associated with ax.
+    ax : matplotlib.axes._subplots.AxesSubplot
+        Axes associated with fig.
+    """
     fig, ax = plt.subplots(figsize=(20, 20))
 
     # Horizontal lines are the lollypop "sticks"
