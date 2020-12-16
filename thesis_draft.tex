@@ -13,8 +13,10 @@
 \usepackage{subcaption}
 \graphicspath{{./assets/}}
 
+\usepackage{longtable}
+
 \title{Cross-posting gamers on Reddit: An analysis of the gamer community}
-\author{Joshua Megnauth\\[1cm]{\small Advised by Dr. Charles J. Gomez}\\[1cm]{\small Queens College, City University of New York}}
+\author{Joshua Megnauth\\[1cm]{\small Advised by Dr. Charles J. Gomez}\\{\small Queens College, City University of New York}}
 \date{\today}
 
 \begin{document}
@@ -82,7 +84,7 @@ Graph theory does not imply big data, but network science scales well to a high 
 
 Variety and velocity are the more interesting of the three Vs. Big data is often raw and heterogeneous. Unlike the nicely structured flat files data are often distributed as, the majority of existing data are unstructured and multiformat (\cite{gandomiamir2015}). For example, Twitter data would likely arrive in a set of different languages with varying levels of grammar, zeitgeist and context specific references, embedded multimedia, retweets, et cetera. With that said, Twitter data may still be pulled from a clean API which means that Tweets are hardly the most unstructured data a scientist would find. Variety, thus, also refers to the format of data; different image or video formats must be handled, and unstructured data must be appropriately stored as well.
 
-Big data is not only intractably diverse but they are also produced at a high velocity (\cite{gandomiamir2015}). For example, consider all of the data gathered by voice processing systems such as Watson, Siri, Alexa, or Google Assistant. Simply browsing the internet, even with JavaScript and DNS blocking, produces an enormous amount of data. Cellphones collect data more or less constantly, especially with more programs/apps in use. \footnote{Data are collected in a manner so megalomaniacal that the European Union instituted the \textit{General Data Protection Regulation} to protect the privacy of E.U. citizens.}
+Big data is not only intractably diverse but they are also produced at a high velocity (\cite{gandomiamir2015}). For example, consider all of the data gathered by voice processing systems such as Watson, Siri, Alexa, or Google Assistant. Simply browsing the internet, even with JavaScript and DNS blocking, produces an enormous amount of data. Cellphones collect data more or less constantly, especially with more programs/apps in use.\footnote{Data are collected in a manner so megalomaniacal that the European Union instituted the \textit{General Data Protection Regulation} to protect the privacy of E.U. citizens.}
 
 The three Vs galvanized the use of certain techniques of gathering and analyzing data. Natural Language Processing, graph theory, unstructured databases, clustering, et cetera are not new, but big data have made such techniques both more viable as well as more necessary. NLP, neural networks, as well as computer vision are hotshot fields of data science more generally as well as the computational social sciences due to the prevalence of so much data. After all, what else would we do with said data (\cite{gandomiamir2015})?
 
@@ -188,85 +190,83 @@ My analysis uses the open source Python\footnote{https://python.org} library Net
 
 \subsection{Limitations}
 
-Big data tend to be intractable due to the three Vs as discussed earlier. Many tests and algorithms are difficult to comfortably run on single computers even if said machines sport excellent hardware. Average node connectivity, average shortest path, betweenness centrality, small world sigma, and other useful metrics are extremely slow to calculate for two reasons. The first issue is that many of the algorithms are highly complex and balloon in running time contingent on how many vertices and edges are present. In other words, many of the algorithms used have a multiplicative or exponential time complexity. NetworkX, despite its repertoire of algorithms and general excellence, is known for being relatively slow compared to other graph implementations. NetworkX is a pure Python library (\cite{networkx}). Python is considerably slower than fast, compiled languages; this is the tradeoff interpreted and scripting languages face. Libraries such as Pandas for data frames/tabular data make use of NumPy, a wrapper around low level linear algebra libraries. Pandas mitigates the slower speed of Python via NumPy. However NumPy is an optional dependency for NetworkX which is only used for some algorithms if requested which in turn means that NetworkX can be very slow. I still wrote my code using NetworkX because the API is Pythonic and treats Python as a first class citizen. Thus, I focussed on the problem domain with the clear negative that my run times were unwieldly.
+Big data tend to be intractable due to the three Vs as discussed earlier. Many tests and algorithms are difficult to comfortably run on single computers even if said machines sport excellent hardware. Average node connectivity, average shortest path, betweenness centrality, small world sigma, and other useful metrics are extremely slow to calculate for two reasons. The first issue is that many of the algorithms are highly complex and balloon in running time contingent on how many vertices and edges are present. In other words, many of the algorithms used have a multiplicative or exponential time complexity. NetworkX, despite its repertoire of algorithms and general excellence, is known for being relatively slow compared to other graph implementations. NetworkX is a pure Python library (\cite{networkx}). Python is considerably slower than fast, compiled languages; this is the trade-off interpreted and scripting languages face. Libraries such as Pandas for data frames/tabular data make use of NumPy, a wrapper around low level linear algebra libraries. Pandas mitigates the slower speed of Python via NumPy. However NumPy is an optional dependency for NetworkX which is only used for some algorithms if requested which in turn means that NetworkX can be very slow. I still wrote my code using NetworkX because the API is Pythonic and treats Python as a first class citizen. Thus, I focussed on the problem domain with the clear negative that my run times were unwieldly.
 
-Notably, other authors, such as Cauteruccio et alia, ran into computational issues as well. Those researchers solved their problem by using server caliber hardware to run their code and calculations. Future research into the distribution of gamers on Reddit would require both vastly more data as well as more powerful hardware to handle those data.
+Notably, other authors, such as Cauteruccio et alia, ran into computational issues as well. Those researchers solved their problem by using server caliber hardware to run their code and calculations. Future research into the distribution of gamers on Reddit would require both vastly more data as well as more powerful hardware to handle those data. I would ideally have access to virtualized hardware as well as a library that can leverage multiprocessing in order to handle millions of edges. NetworkX is a very clean implementation of graph algorithms, but the slow speed would not be conducive to a large project. Rust's petgraph is likely fast but lacks the breadth of algorithms supported by NetworkX.
 
 \subsection{Network processing}
-\begin{table}
-  \centering
-    \begin{tabular} {c c c}
-      \hline \\
-      Subreddit & SysGamGen & Systems \\
-      \hline \\
-      DarkSouls2 & Game & Multiple \\
-      KingdomHearts & Game & Sony \\
-      darksouls & Game & Multiple \\
-      fireemblem & Game & Nintendo \\
-      MonsterHunter & Game & Multiple \\
-      Doom & Game & Multiple \\
-      bloodborne & Game & Sony \\
-      DevilMayCry & Game & Multiple \\
-      darksouls3 & Game & Multiple \\
-      pokemon & Game & Nintendo \\
-      halo & Game & Microsoft \\
-      yakuzagames & Game & Sony \\
-      Fallout & Game & Multiple \\
-      DestinyTheGame & Game & Multiple \\
-      metalgearsolid & Game & Multiple \\
-      skyrim & Game & Multiple \\
-      monsterhunterworld & Game & Multiple \\
-      demonssouls & Game & Sony \\
-      wow & Game & P.C. \\
-      MineCraft & Game & Minecraft \\
-      Overwatch & Game & P.C. \\
-      GlobalOffensive & Game & P.C. \\
-      leagueoflegends & Game & P.C. \\
-      DotA2 & Game & P.C. \\
-      zelda & Game & Nintendo \\
-      AnimalCrossing & Game & Nintendo \\
-      witcher & Game & Multiple \\
-      PUBATTLEGROUNDS & Game & P.C. \\
-      SEGA & Game & Multiple \\
-      smashbros & Game & Nintendo \\
-      RocketLeague & Game & Multiple \\
-      FallGuysGame & Game & Multiple \\
-      StarDewValley & Game & Multiple \\
-      psx & System & Sony \\
-      PS3 & System & Sony \\
-      ps2 & System & Sony \\
-      pcmasterrace & System & P.C. \\
-      nintendo & System & Nintendo \\
-      xboxone & System & Microsoft \\
-      pcgaming & System & P.C. \\
-      PS4 & System & Sony \\
-      Steam & System & P.C. \\
-      buildapc & System & P.C. \\
-      NintendoSwitch & System & Nintendo \\
-      PS5 & System & Sony \\
-      XboxSeriesX & System & Microsoft \\
-      3DS & System & Nintendo \\
-      xbox & System & Microsoft \\
-      xbox360 & System & Microsoft \\
-      JRPG & General & Multiple \\
-      gamedesign & General & Non-system \\
-      linux\_gaming & General & Non-system \\
-      otomegames & General & Multiple \\
-      boardgames & General & Non-system \\
-      emulation & General & P.C. \\
-      Games & General & Non-system \\
-      gaming & General & Non-system \\
-      GamePhysics & General & Non-system \\
-      rpg & General & Non-system \\
-      truegaming & General & Non-system \\
-      ShouldIBuythisgame & General & Non-system \\
-      FreeGamesOnSteam & General & P.C. \\
-      IndieGaming & General & Non-system \\
-      \hline
-    \end{tabular}
-    \caption{Listing of two main assortativity measures. SysGamGen is shorthand for Systems, Games, and General.}
-    \label{tab:AssortSplit}
-\end{table}
+  \begin{longtable} {c c c}
+    \caption{Listing of two main assortativity measures. SysGamGen is shorthand for Systems, Games, and General.}\label{tab:AssortSplit}\\
+    \hline \\
+    Subreddit & SysGamGen & Systems \\
+    \hline
+    \endhead
+    \hline
+    \endfoot
+    DarkSouls2 & Game & Multiple \\
+    KingdomHearts & Game & Sony \\
+    darksouls & Game & Multiple \\
+    fireemblem & Game & Nintendo \\
+    MonsterHunter & Game & Multiple \\
+    Doom & Game & Multiple \\
+    bloodborne & Game & Sony \\
+    DevilMayCry & Game & Multiple \\
+    darksouls3 & Game & Multiple \\
+    pokemon & Game & Nintendo \\
+    halo & Game & Microsoft \\
+    yakuzagames & Game & Sony \\
+    Fallout & Game & Multiple \\
+    DestinyTheGame & Game & Multiple \\
+    metalgearsolid & Game & Multiple \\
+    skyrim & Game & Multiple \\
+    monsterhunterworld & Game & Multiple \\
+    demonssouls & Game & Sony \\
+    wow & Game & P.C. \\
+    MineCraft & Game & Minecraft \\
+    Overwatch & Game & P.C. \\
+    GlobalOffensive & Game & P.C. \\
+    leagueoflegends & Game & P.C. \\
+    DotA2 & Game & P.C. \\
+    zelda & Game & Nintendo \\
+    AnimalCrossing & Game & Nintendo \\
+    witcher & Game & Multiple \\
+    PUBATTLEGROUNDS & Game & P.C. \\
+    SEGA & Game & Multiple \\
+    smashbros & Game & Nintendo \\
+    RocketLeague & Game & Multiple \\
+    FallGuysGame & Game & Multiple \\
+    StarDewValley & Game & Multiple \\
+    psx & System & Sony \\
+    PS3 & System & Sony \\
+    ps2 & System & Sony \\
+    pcmasterrace & System & P.C. \\
+    nintendo & System & Nintendo \\
+    xboxone & System & Microsoft \\
+    pcgaming & System & P.C. \\
+    PS4 & System & Sony \\
+    Steam & System & P.C. \\
+    buildapc & System & P.C. \\
+    NintendoSwitch & System & Nintendo \\
+    PS5 & System & Sony \\
+    XboxSeriesX & System & Microsoft \\
+    3DS & System & Nintendo \\
+    xbox & System & Microsoft \\
+    xbox360 & System & Microsoft \\
+    JRPG & General & Multiple \\
+    gamedesign & General & Non-system \\
+    linux\_gaming & General & Non-system \\
+    otomegames & General & Multiple \\
+    boardgames & General & Non-system \\
+    emulation & General & P.C. \\
+    Games & General & Non-system \\
+    gaming & General & Non-system \\
+    GamePhysics & General & Non-system \\
+    rpg & General & Non-system \\
+    truegaming & General & Non-system \\
+    ShouldIBuythisgame & General & Non-system \\
+    FreeGamesOnSteam & General & P.C. \\
+    IndieGaming & General & Non-system \\
+  \end{longtable}
 Like all data my network required processing and cleaning. Likewise, data processing should be disclosed for reproducibility. I pruned my network by removing nodes that appear less than three times. The value three is somewhat arbitrary as I intended to maximize the number of observations kept while removing a good chunk of the noise. A threshold of three did not shrink the network unreasonably; the majority of the data remained and manageability increased.
 
 Next, subreddits were divided into two assortativity or similarity measures shown in table \ref{tab:AssortSplit}. The subs themselves were compiled in large part based on Mike Sizz's Reddit List by manually selecting the top gaming subs (\cite{redditlist}). Prior knowledge guided creating the assortativity classes. Nodes are assigned based on the sub that they posted in most frequently. Separating the subreddits by \textit{Systems, Games, and General} or each console feels naturalistic. \textit{Systems, Games, and General} classifies subreddits by whether they refer to a system (such as all subs for all consoles or P.C.s), relate to a game, or are about general purpose gaming. The \textit{Systems} distinction is similarly natural. Some subreddits are simply more associated with a specific console or company than others. For example, Mario, Zelda, Animal Crossing, Metroid, et alia are Nintendo only series. I took some liberties with series that are generally associated with a platform but have only recently become multiplatform. The Yakuza series is a quintessential PlayStation series. However, Sega recently (2019 and beyond) ported the series to P.C. Likewise, Halo is an Xbox series that 343 Industries recently ported to P.C. (2018\footnote{For the \textit{Master Chief Collection}. The first two Halo games had older P.C. ports, but Halo was still commonly thought of as an Xbox series.}) I classified these two series under their respective original platforms due to data limitations. Data limitations affect classifications in other ways as well. Gathering even more subreddits would open more potential classes. For example, perhaps genres and games would be a viable metric if I were able to scrape more data.
@@ -319,11 +319,11 @@ The steps above produced 10000 replicates of average clustering, density, degree
     Assort (Systems) & 0.74587 & 0.74581 \\
     \hline
   \end{tabular}
-  \caption{Network and LCC statistics calculated via NetworkX.}
+  \caption{Network and LCC statistics calculated via NetworkX. Radius and diameter are infinity for unconnected graphs.}
   \label{tab:NetworkStats}
 \end{table}
 
-Preliminary results are rather interesting despite the limitations discussed above. The calculated statistics are available in table \ref{tab:NetworkStats}. The full weighted projection of the graph contains 11474 nodes and 170120 edges. The LCC, surprisingly, is barely reduced at 11203 nodes and 170080 edges (that is, only 40 edges smaller). In other words, data collection pulled hundreds of individuals who appeared repeatedly in the data (which is evident from the processing discussed earlier) who also responded to other users across topics enough to ensure that the network has a large LCC. LCC is not density or transitivity, but enumerating connected components helps observe connectedness. The connected components smaller than the LCC are all of a small length, such as one or two nodes with degrees of one.
+Preliminary results are rather interesting despite the limitations discussed above. The calculated statistics are available in table \ref{tab:NetworkStats}. The full weighted projection of the graph contains 11474 nodes and 170120 edges. The LCC, surprisingly, is barely reduced at 11203 nodes and 170080 edges (that is, only 40 edges smaller). In other words, data collection pulled hundreds of individuals who appeared repeatedly in the data (which is evident from the processing discussed earlier) who also responded to other users across topics enough to ensure that the network has a large LCC. LCC is not a statistic like density or transitivity, but enumerating connected components helps observe connectedness. The connected components smaller than the LCC are all of a small length, such as one or two nodes with degrees of one. Thus, the observed network has very little disjointed components as everyone is connected in some way. Filtering the data likely lead to the few nodes that were disconnected from the graph.
 
 \begin{figure}[ht!]
   \centering
@@ -385,6 +385,9 @@ The limitations encountered engenders a cautious discussion. Assortativity likel
 Future research would ideally analyze much more data. My data gathering process precluded the text of the posts and topic names were encoded for privacy. However, text data, including posts and topic names, could be used for topic analysis whereby the "subjects" of each post or topic could be pulled out to use in assortativity. As mentioned earlier, more data would also mean a fuller network where more gamers can be compared across more subreddits. About a quarter of my small sample posted on at least two different subreddits, so gathering more data would likely magnify this trend. A breadth first search would result in a graph of gamers plus their posts in subreddits outside of video games. Essentially the data would consist of two separate graphs which would allow comparing the connections between gamers within gaming subreddits as well as possible connections outside of gaming subs. Finally, future research could also compare the gamer graph to graphs of music fans, sports wonks, film buffs, et cetera. Perhaps gamers are more connected across subs than Redditors interested in other topics.
 
 Subreddits for film series as well as individual bands, musicians, and genres exist. However, none of the subreddits for these topics beyond the major subs seem to come close to gaming's efficacy. Regardless, studying a large graph of music subs comparatively with a large graph of gaming subs seems like the best step toward improving my research. The alternative graphs may function as a stronger null model in addition to the weaker p-values. A quick check shows that the subreddits for indie bands link to other indie bands as well as more encompassing subs. The subreddit for the band King Crimson links to several well known prog rock and metal subreddits as well as subs for related genres such as post-rock. However, none of these subreddits have many subscribers especially when compared to even the smaller subs gathered for this thesis.
+
+\section{Conclusion}
+My results are promising despite limitations. Big data are notoriously intractable due to the three Vs. My data consists of 127K observations that are processed down to a projected network of 11K nodes. Even this smaller projection is difficult to manage on relatively good hardware. However, my analysis has found that gamers post and interact across multiple subreddits. The K-core graph is one revealing example where at least two users link two greatly connected segments that in turn consist of different subreddits (see: figure \ref{fig:kcore50_80}). More evidence is found in the high assortativity for the constructed attributes as well as with the nodes in the radius and diameter. Future research into my subject would require stronger hardware and more data in order to analyze the data more robustly. Finally, both positive or negative results are helpful for the nascent field of ludology.
 
 \printbibliography
 
