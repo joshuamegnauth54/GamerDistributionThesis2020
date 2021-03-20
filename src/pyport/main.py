@@ -23,10 +23,12 @@ def deg_cent_metrics(gamers_df, projection):
 
 
 def sorted_components(projection):
+    """Return the largest connected components in descending order."""
     return sorted(nx.connected_components(projection), key=len, reverse=True)
 
 
 def largest_connected_component(projection):
+    """Return LCC of projection."""
     lcc = nx.subgraph(projection,
                       sorted_components(projection)[0])
     # Note to self: subgraph isn't a copy so this breaks.
@@ -58,13 +60,14 @@ def test_small(N):
 # Lots of duplicated code. Oops. I realized I like how I did it for 790.
 def draw_and_save(projection, gamers_df, path="../../assets/",
                   k_range=range(50, 90, 10)):
+    """Create and save plots used in final paper."""
     print("Drawing graph augmented with degree centrality.")
     fig, ax, _ = draw_degree_centrality(projection, alpha=0.6)
 
     # Add legend and title
-    col_labels=[("#ff79c6", "Systems/consoles"),
-                ("#50fa7b", "Games or game series"),
-                ("#8be9fd", "Miscellaneous")]
+    col_labels = [("#ff79c6", "Systems/consoles"),
+                  ("#50fa7b", "Games or game series"),
+                  ("#8be9fd", "Miscellaneous")]
     add_network_leg(fig, ax,
                     suptitle="Size = degree centrality",
                     col_labels=col_labels)
@@ -92,8 +95,8 @@ def draw_and_save(projection, gamers_df, path="../../assets/",
                                                 "#44475a",
                                                 "#44475a"])
     add_network_leg(fig, ax[0][0],
-                suptitle="K-core decomposition of gamers network",
-                legend=False)
+                    suptitle="K-core decomposition of gamers network",
+                    legend=False)
 
     for k_ax, k in zip(ax.flat, k_range):
         add_network_leg(fig, k_ax, "k = {}".format(k),
@@ -161,7 +164,7 @@ def draw_and_save(projection, gamers_df, path="../../assets/",
 
 
 def print_useful_metrics(projection, attributes=None):
-
+    """Print metrics for projection and LCC, such as radius and diameter."""
     # Using a mutable list is bad default practice, I think.
     if not attributes:
         attributes = ["SysGamGen", "Systems"]
