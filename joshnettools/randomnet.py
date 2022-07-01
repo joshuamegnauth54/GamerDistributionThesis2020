@@ -8,18 +8,18 @@ from ctypes import c_bool
 def random_graph(top_n, bottom_n, edge_n):
     # Generate a random graph using the parameters of a previously created
     # graph
-    G = nx.bipartite.generators.gnmk_random_graph(top_n,
-                                                  bottom_n,
-                                                  edge_n)
+    G = nx.bipartite.generators.gnmk_random_graph(top_n, bottom_n, edge_n)
 
     # Sanity check. Useless sanity check.
-    assert(nx.bipartite.is_bipartite(G))
+    assert nx.bipartite.is_bipartite(G)
     # The bottom/right nodes are set as 1 under the "bipartite" attribute.
     # So, I pull out those nodes using a set comprehension to pass to
     # bipartite.weighted_projected_graph.
-    bnodes = {node for node, value in
-              nx.get_node_attributes(G, "bipartite").items()
-              if value == 1}
+    bnodes = {
+        node
+        for node, value in nx.get_node_attributes(G, "bipartite").items()
+        if value == 1
+    }
     return nx.bipartite.weighted_projected_graph(G, bnodes)
 
 
@@ -40,14 +40,13 @@ def random_density(queue, keep_going, top_n, bottom_n, edge_n, **kwargs):
 def random_deg_cent(queue, keep_going, top_n, bottom_n, edge_n, **kwargs):
     while keep_going.value:
         G = random_graph(top_n, bottom_n, edge_n)
-        queue.put(np.mean(np.fromiter(nx.degree_centrality(G).values(),
-                                      np.float64)))
+        queue.put(np.mean(np.fromiter(nx.degree_centrality(G).values(), np.float64)))
+
 
 def random_deg_assort(queue, keep_going, top_n, bottom_n, edge_n, **kwargs):
     while keep_going.value:
         G = random_graph(top_n, bottom_n, edge_n)
-        queue.put(nx.degree_pearson_correlation_coefficient(G,
-                                                            weight="weight"))
+        queue.put(nx.degree_pearson_correlation_coefficient(G, weight="weight"))
 
 
 def random_assort(queue, keep_going, top_n, bottom_n, edge_n, unique_attr):
@@ -59,15 +58,24 @@ def random_assort(queue, keep_going, top_n, bottom_n, edge_n, unique_attr):
     while keep_going.value:
         G = random_graph(top_n, bottom_n, edge_n)
         # Select a random attribute from
-        nx.set_node_attributes(G,
-                               {node: attr[np.random.randint(0, unique_attr)]
-                                for node in G.nodes()},
-                               attr_name)
+        nx.set_node_attributes(
+            G,
+            {node: attr[np.random.randint(0, unique_attr)] for node in G.nodes()},
+            attr_name,
+        )
         queue.put(nx.attribute_assortativity_coefficient(G, attr_name))
 
 
-def dispatcher(gamers_df, func, top="permalink", bottom="author",
-               replicates=100000, processes=6, timeout=60, assort=None):
+def dispatcher(
+    gamers_df,
+    func,
+    top="permalink",
+    bottom="author",
+    replicates=100000,
+    processes=6,
+    timeout=60,
+    assort=None,
+):
     """Calculate replicates from random graphs.
 
     Parameters
@@ -113,8 +121,11 @@ def dispatcher(gamers_df, func, top="permalink", bottom="author",
 
     # The keyword unique_attr is simply the count of unique possible
     # attributes.
-    kwargs = {"unique_attr": gamers_df[assort or top].nunique()}\
-        if func is random_assort else []
+    kwargs = (
+        {"unique_attr": gamers_df[assort or top].nunique()}
+        if func is random_assort
+        else []
+    )
 
     # Multiprocessing stuff.
     # A threadsafe Queue is easier than sharing a memory mapped buffer since
@@ -128,10 +139,12 @@ def dispatcher(gamers_df, func, top="permalink", bottom="author",
     handles = []
     try:
         for i in range(processes):
-            proc = Process(target=func,
-                           name="randomnet_{}".format(i),
-                           args=(queue, keep_going, top_n, bottom_n, edge_n),
-                           kwargs=kwargs)
+            proc = Process(
+                target=func,
+                name="randomnet_{}".format(i),
+                args=(queue, keep_going, top_n, bottom_n, edge_n),
+                kwargs=kwargs,
+            )
             proc.start()
             handles.append(proc)
 
@@ -148,8 +161,7 @@ def dispatcher(gamers_df, func, top="permalink", bottom="author",
             # imploded.
 
             if not all(map(lambda proc: proc.is_alive(), handles)):
-                logging.critical("All processes are dead. Iter: {}"
-                                 .format(j))
+                logging.critical("All processes are dead. Iter: {}".format(j))
                 raise RuntimeError("All processes are dead. RIP.")
 
             # No single replicate should take more than a minute.

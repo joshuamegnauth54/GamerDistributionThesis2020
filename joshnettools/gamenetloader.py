@@ -1,12 +1,13 @@
 import networkx as nx
 import pandas as pd
+from typing import Optional
 
 # Shrink the network by removing everyone who doesn't appear as frequently
 # as this value.
 DEFAULT_N_FREQUENCY = 3
 
 
-def shrink_network_by(gamers_df, n_freq):
+def shrink_network_by(gamers_df: pd.DataFrame, n_freq: int):
     """Remove nodes that appear less than n_freq.
 
     Parameters
@@ -20,7 +21,6 @@ def shrink_network_by(gamers_df, n_freq):
     -------
     gamers_df : pandas.DataFrame
         Filtered copy of gamers_df.
-
     """
     # This could be a one liner, but Python looks a bit messy like that.
     # I'm filtering for authors who appear at least as much as n_freq
@@ -29,7 +29,7 @@ def shrink_network_by(gamers_df, n_freq):
     return gamers_df.loc[gamers_df.author.isin(mask)]
 
 
-def load_network(path, n_freq=DEFAULT_N_FREQUENCY):
+def load_network(path: str, n_freq: Optional[int] = DEFAULT_N_FREQUENCY):
     """Loads and processes gamers network from path.
 
     Parameters
@@ -52,25 +52,77 @@ def load_network(path, n_freq=DEFAULT_N_FREQUENCY):
     # ======================================
     # Systems, games, and general subreddits
     # ======================================
-    game_subs = ["DarkSouls2", "KingdomHearts", "darksouls", "fireemblem",
-                 "MonsterHunter", "Doom", "bloodborne", "DevilMayCry",
-                 "darksouls3", "pokemon", "halo", "yakuzagames",
-                 "Fallout", "DestinyTheGame", "metalgearsolid", "skyrim",
-                 "MonsterHunterWorld", "demonssouls", "wow", "Minecraft",
-                 "Overwatch", "GlobalOffensive", "leagueoflegends",
-                 "zelda", "AnimalCrossing", "witcher", "PUBATTLEGROUNDS",
-                 "SEGA", "smashbros", "RocketLeague", "FallGuysGame",
-                 "StardewValley", "DotA2"]
+    game_subs = [
+        "DarkSouls2",
+        "KingdomHearts",
+        "darksouls",
+        "fireemblem",
+        "MonsterHunter",
+        "Doom",
+        "bloodborne",
+        "DevilMayCry",
+        "darksouls3",
+        "pokemon",
+        "halo",
+        "yakuzagames",
+        "Fallout",
+        "DestinyTheGame",
+        "metalgearsolid",
+        "skyrim",
+        "MonsterHunterWorld",
+        "demonssouls",
+        "wow",
+        "Minecraft",
+        "Overwatch",
+        "GlobalOffensive",
+        "leagueoflegends",
+        "zelda",
+        "AnimalCrossing",
+        "witcher",
+        "PUBATTLEGROUNDS",
+        "SEGA",
+        "smashbros",
+        "RocketLeague",
+        "FallGuysGame",
+        "StardewValley",
+        "DotA2",
+    ]
 
-    sys_subs = ["psx", "PS3", "ps2", "pcmasterrace", "nintendo",
-                "xboxone", "pcgaming", "PS4", "Steam", "buildapc",
-                "NintendoSwitch", "PS5", "XboxSeriesX", "3DS", "xbox",
-                "xbox360"]
+    sys_subs = [
+        "psx",
+        "PS3",
+        "ps2",
+        "pcmasterrace",
+        "nintendo",
+        "xboxone",
+        "pcgaming",
+        "PS4",
+        "Steam",
+        "buildapc",
+        "NintendoSwitch",
+        "PS5",
+        "XboxSeriesX",
+        "3DS",
+        "xbox",
+        "xbox360",
+    ]
 
-    gen_subs = ["JRPG", "gamedesign", "linux_gaming", "otomegames",
-                "boardgames", "emulation", "Games", "gaming", "GamePhysics",
-                "rpg", "truegaming", "ShouldIbuythisgame", "FreeGamesOnSteam",
-                "IndieGaming"]
+    gen_subs = [
+        "JRPG",
+        "gamedesign",
+        "linux_gaming",
+        "otomegames",
+        "boardgames",
+        "emulation",
+        "Games",
+        "gaming",
+        "GamePhysics",
+        "rpg",
+        "truegaming",
+        "ShouldIbuythisgame",
+        "FreeGamesOnSteam",
+        "IndieGaming",
+    ]
 
     # VGames avoids clashes with Games
     gamers.loc[gamers.subreddit.isin(game_subs), "SysGamGen"] = "VGames"
@@ -88,31 +140,83 @@ def load_network(path, n_freq=DEFAULT_N_FREQUENCY):
 
     # The Yakuzas are recently being ported to PC, but I'll add it to Sony
     # for now anyway.
-    sony_subs = ["psx", "ps2", "PS3", "PS4", "PS5", "bloodborne",
-                 "demonssouls", "KingdomHearts", "yakuzagames"]
+    sony_subs = [
+        "psx",
+        "ps2",
+        "PS3",
+        "PS4",
+        "PS5",
+        "bloodborne",
+        "demonssouls",
+        "KingdomHearts",
+        "yakuzagames",
+    ]
 
     # The Halo Master Chief Collection was ported to PC in 2019.
     # Buuuut the Xbox section seems lonely so I'll include Halo.
     # (This is a limitation based on how I collected the data).
     xbox_subs = ["xbox", "xbox360", "xboxone", "XboxSeriesX", "halo"]
 
-    nintendo_subs = ["nintendo", "NintendoSwitch", "3DS", "fireemblem",
-                     "pokemon", "AnimalCrossing", "smashbros", "zelda"]
+    nintendo_subs = [
+        "nintendo",
+        "NintendoSwitch",
+        "3DS",
+        "fireemblem",
+        "pokemon",
+        "AnimalCrossing",
+        "smashbros",
+        "zelda",
+    ]
 
-    pc_subs = ["wow", "leagueoflegends", "GlobalOffensive", "Minecraft",
-               "Overwatch", "linux_gaming", "emulation", "Steam",
-               "buildapc", "pcmasterrace", "FreeGamesOnSteam",
-               "DotA2", "pcgaming"]
+    pc_subs = [
+        "wow",
+        "leagueoflegends",
+        "GlobalOffensive",
+        "Minecraft",
+        "Overwatch",
+        "linux_gaming",
+        "emulation",
+        "Steam",
+        "buildapc",
+        "pcmasterrace",
+        "FreeGamesOnSteam",
+        "DotA2",
+        "pcgaming",
+    ]
 
-    multi_subs = ["DarkSouls2", "darksouls", "MonsterHunter", "Fallout",
-                  "DestinyTheGame", "skyrim", "metalgearsolid", "witcher",
-                  "PUBATTLEGROUNDS", "SEGA", "RocketLeague", "FallGuysGame",
-                  "StardewValley", "otomegames", "Doom", "DevilMayCry",
-                  "darksouls3", "JRPG", "rpg", "IndieGaming",
-                  "MonsterHunterWorld"]
+    multi_subs = [
+        "DarkSouls2",
+        "darksouls",
+        "MonsterHunter",
+        "Fallout",
+        "DestinyTheGame",
+        "skyrim",
+        "metalgearsolid",
+        "witcher",
+        "PUBATTLEGROUNDS",
+        "SEGA",
+        "RocketLeague",
+        "FallGuysGame",
+        "StardewValley",
+        "otomegames",
+        "Doom",
+        "DevilMayCry",
+        "darksouls3",
+        "JRPG",
+        "rpg",
+        "IndieGaming",
+        "MonsterHunterWorld",
+    ]
 
-    nonsys_subs = ["gamedesign", "boardgames", "Games", "gaming",
-                   "GamePhysics", "truegaming", "ShouldIbuythisgame"]
+    nonsys_subs = [
+        "gamedesign",
+        "boardgames",
+        "Games",
+        "gaming",
+        "GamePhysics",
+        "truegaming",
+        "ShouldIbuythisgame",
+    ]
 
     gamers.loc[gamers.subreddit.isin(sony_subs), "Systems"] = "Sony"
     gamers.loc[gamers.subreddit.isin(xbox_subs), "Systems"] = "Xbox"
@@ -140,7 +244,7 @@ def load(path=None):
     # Try the data directory if !path
     if not path:
         try:
-            return load_network("../../data/gamers_reddit_medium_2020.csv")
+            return load_network("../data/gamers_reddit_medium_2020.csv")
         # Catch FileNotFoundError in order to try GitHub next.
         except FileNotFoundError:
             path = "https://github.com/joshuamegnauth54/GamerDistributionThesis2020/raw/master/data/gamers_reddit_medium_2020.csv"

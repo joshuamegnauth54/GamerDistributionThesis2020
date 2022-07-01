@@ -21,12 +21,13 @@ def project_gamers(gamers_df, top, bottom):
     networkx.Graph.
     """
     G = nx.from_pandas_edgelist(gamers_df, top, bottom, edge_attr=True)
-    assert(nx.bipartite.is_bipartite(G))
+    assert nx.bipartite.is_bipartite(G)
     Bnodes = set(gamers_df[bottom].values)
     projection = nx.bipartite.weighted_projected_graph(G, Bnodes)
     add_attributes(projection, gamers_df)
-    projection.name = "Gamers network projection; top: {} bottom: {}"\
-        .format(top, bottom)
+    projection.name = "Gamers network projection; top: {} bottom: {}".format(
+        top, bottom
+    )
     return projection
 
 

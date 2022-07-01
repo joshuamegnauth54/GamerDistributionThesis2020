@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "joshthesistools"
+version = "0.9.0"
+description = "NetworkX wrappers for my social network analysis thesis."
+keywords = ["data science", "networkx", "reddit", "social network"]
+authors = ["Joshua Megnauth <joshua.megnauth@dontemailme.com>"]
+homepage = ""
+license = "GPL-3.0-or-later"
+readme = "README.md"
+repository = "https://github.com/joshuamegnauth54/GamerDistributionThesis2020"
+include = ["assets", "data"]
+
+[tool.poetry.dependencies]
+python = "3.9"
+pyarrow = "8.0.0"
+pydot = "1.4.2"
+pandas = "1.4.2"
+networkx = "2.8.4"
+numpy = "1.23.0"
+matplotlib = "3.5.2"
+seaborn = "0.11.2"
+
+[tool.poetry.dev-dependencies]
+black = "22.6.0"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
