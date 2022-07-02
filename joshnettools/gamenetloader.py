@@ -1,5 +1,6 @@
 import networkx as nx
 import pandas as pd
+from logging import info, warning
 from typing import Optional
 
 # Shrink the network by removing everyone who doesn't appear as frequently
@@ -24,12 +25,12 @@ def shrink_network_by(gamers_df: pd.DataFrame, n_freq: int):
     """
     # This could be a one liner, but Python looks a bit messy like that.
     # I'm filtering for authors who appear at least as much as n_freq
-    mask = gamers_df.author.value_counts() >= n_freq
-    mask = gamers_df.author.value_counts()[mask].index
+    mask: pd.Series = gamers_df.author.value_counts() >= n_freq
+    mask: np.ndarray[str] = gamers_df.author.value_counts()[mask].index
     return gamers_df.loc[gamers_df.author.isin(mask)]
 
 
-def load_network(path: str, n_freq: Optional[int] = DEFAULT_N_FREQUENCY):
+def load_network(path: str, n_freq: int = DEFAULT_N_FREQUENCY):
     """Loads and processes gamers network from path.
 
     Parameters
@@ -44,15 +45,14 @@ def load_network(path: str, n_freq: Optional[int] = DEFAULT_N_FREQUENCY):
     -------
     gamers : pandas.DataFrame
         DataFrame of processed gamers network.
-
     """
-    gamers = pd.read_csv(path)
-    gamers = shrink_network_by(gamers, n_freq)
+    gamers: pd.DataFrame = pd.read_csv(path, engine="pyarrow")
+    gamers: pd.DataFrame = shrink_network_by(gamers, n_freq)
 
     # ======================================
     # Systems, games, and general subreddits
     # ======================================
-    game_subs = [
+    game_subs: list[str] = [
         "DarkSouls2",
         "KingdomHearts",
         "darksouls",
@@ -88,7 +88,7 @@ def load_network(path: str, n_freq: Optional[int] = DEFAULT_N_FREQUENCY):
         "DotA2",
     ]
 
-    sys_subs = [
+    sys_subs: list[str] = [
         "psx",
         "PS3",
         "ps2",
@@ -107,7 +107,7 @@ def load_network(path: str, n_freq: Optional[int] = DEFAULT_N_FREQUENCY):
         "xbox360",
     ]
 
-    gen_subs = [
+    gen_subs: list[str] = [
         "JRPG",
         "gamedesign",
         "linux_gaming",
@@ -140,7 +140,7 @@ def load_network(path: str, n_freq: Optional[int] = DEFAULT_N_FREQUENCY):
 
     # The Yakuzas are recently being ported to PC, but I'll add it to Sony
     # for now anyway.
-    sony_subs = [
+    sony_subs: list[str] = [
         "psx",
         "ps2",
         "PS3",
@@ -155,9 +155,9 @@ def load_network(path: str, n_freq: Optional[int] = DEFAULT_N_FREQUENCY):
     # The Halo Master Chief Collection was ported to PC in 2019.
     # Buuuut the Xbox section seems lonely so I'll include Halo.
     # (This is a limitation based on how I collected the data).
-    xbox_subs = ["xbox", "xbox360", "xboxone", "XboxSeriesX", "halo"]
+    xbox_subs: list[str] = ["xbox", "xbox360", "xboxone", "XboxSeriesX", "halo"]
 
-    nintendo_subs = [
+    nintendo_subs: list[str] = [
         "nintendo",
         "NintendoSwitch",
         "3DS",
@@ -168,7 +168,7 @@ def load_network(path: str, n_freq: Optional[int] = DEFAULT_N_FREQUENCY):
         "zelda",
     ]
 
-    pc_subs = [
+    pc_subs: list[str] = [
         "wow",
         "leagueoflegends",
         "GlobalOffensive",
@@ -184,7 +184,7 @@ def load_network(path: str, n_freq: Optional[int] = DEFAULT_N_FREQUENCY):
         "pcgaming",
     ]
 
-    multi_subs = [
+    multi_subs: list[str] = [
         "DarkSouls2",
         "darksouls",
         "MonsterHunter",
@@ -208,7 +208,7 @@ def load_network(path: str, n_freq: Optional[int] = DEFAULT_N_FREQUENCY):
         "MonsterHunterWorld",
     ]
 
-    nonsys_subs = [
+    nonsys_subs: list[str] = [
         "gamedesign",
         "boardgames",
         "Games",
@@ -228,7 +228,7 @@ def load_network(path: str, n_freq: Optional[int] = DEFAULT_N_FREQUENCY):
     return gamers
 
 
-def load(path=None):
+def load(path: Optional[str]=None):
     """Load gamer network from path if specified or try alternative paths.
 
     Parameters
@@ -244,9 +244,11 @@ def load(path=None):
     # Try the data directory if !path
     if not path:
         try:
-            return load_network("../data/gamers_reddit_medium_2020.csv")
+            info("Trying to load data from disk")
+            path: Path = Path(__file__).parent.resolve().joinpath("data", "gamers_reddit_medium_2020.csv")
         # Catch FileNotFoundError in order to try GitHub next.
         except FileNotFoundError:
+            warning("Loading data from GitHub")
             path = "https://github.com/joshuamegnauth54/GamerDistributionThesis2020/raw/master/data/gamers_reddit_medium_2020.csv"
-    else:
-        return load_network(path)
+
+    return load_network(path)

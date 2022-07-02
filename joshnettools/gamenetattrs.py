@@ -1,11 +1,11 @@
 import networkx as nx
 import pandas as pd
 from networkx import classes.graph.Graph
+from typing import Optional
 
 import subcolors
 
-
-def parse_auth_attr(gamers_df: pd.DataFrame, node: str, attr: str):
+def parse_auth_attr(gamers_df: pd.DataFrame, node: str, attr: str) -> str:
     """Return a color based on an author's (node) most posted attribute.
 
     An attribute may be a subreddit or even systems.
@@ -30,12 +30,12 @@ def parse_auth_attr(gamers_df: pd.DataFrame, node: str, attr: str):
     # (The above isn't accurate anymore, but I don't have time to modify
     # the function in case I break it.)
     try:
-        most_posted = (
+        most_posted: Optional[str] = (
             gamers_df.loc[gamers_df.author == node, attr].value_counts().idxmax()
         )
     except ValueError:
         # print("DEBUG: node: {} and attr: {}".format(node, attr))
-        most_posted = None
+        most_posted: Optional[str] = None
     finally:
         return subcolors.subreddit_colors([most_posted])
 
@@ -57,16 +57,17 @@ def parse_edge_attr(gamers_df: pd.DataFrame, first: str, second: str, attr: str)
 
     Returns
     -------
-    A color based on the intersection of attrs for first and second if
-    they only share one of said attr or a default.
+    str
+        A color based on the intersection of attrs for first and second if
+        they only share one of said attr or a default.
     """
     # Filter to pull the subreddits that "first" and "second" post on.
-    first_attrs = set(gamers_df.loc[gamers_df.author == first, attr].to_numpy())
-    second_attrs = set(gamers_df.loc[gamers_df.author == second, attr].to_numpy())
+    first_attrs: set(str) = set(gamers_df.loc[gamers_df.author == first, attr].to_numpy())
+    second_attrs: set(str) = set(gamers_df.loc[gamers_df.author == second, attr].to_numpy())
 
     # The intersection may be one or multiple subs.
     # Subcolors handles both situations.
-    intersects = first_attrs.intersection(second_attrs)
+    intersects: set(str) = first_attrs.intersection(second_attrs)
     # print(DEBUG: "({}) ∩ ({}) = {}".format(first, second, intersects))
 
     return subcolors.subreddit_colors(intersects)
@@ -80,7 +81,7 @@ def add_attributes(G: Graph, gamers_df: pd.DataFrame):
     G: networkx.classes.graph.Graph
         NetworkX graph from gaming network data.
     gamers_df: pandas.DataFrame
-        DataFrame of the loaded data used to construct G.
+        DataFrame used to construct network G.
 
     Returns
     -------

@@ -1,10 +1,10 @@
 # Subreddit colors
-from typing import Union
+from typing import Union, Optional
 
 # I looked up the hex colors associated with some of these. For example,
 # I gave Goofy's orange to Kingdom Hearts. Other subs were given colors
 # somewhat randomly. Also, I'm well aware that I can just set a palette.
-__sub_colors = {
+__sub_colors: dict[Optional[str], str] = {
     "DevilMayCry": "#ff5555",
     "bloodborne": "#ff0066",
     "MonsterHunter": "#3bd1ff",

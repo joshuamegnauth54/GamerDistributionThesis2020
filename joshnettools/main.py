@@ -1,4 +1,6 @@
 import networkx as nx
+import pandas as pd
+from network.classes.graph import Graph
 
 # from matplotlib.patches import Patch
 
@@ -24,7 +26,7 @@ from pvalueplots import p_value_plots
 # gamers_df.groupby("author").subreddit.nunique().sort_values(ascending=False)
 
 
-def deg_cent_metrics(gamers_df, projection):
+def deg_cent_metrics(gamers_df: pd.DataFrame, projection: Graph):
     """Return a sorted degree centrality dict so I don't have to keep typing
     the line below."""
     dc = sorted(nx.degree_centrality(projection).items(), key=lambda x: x[1])
