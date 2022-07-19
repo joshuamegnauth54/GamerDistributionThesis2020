@@ -1,53 +1,58 @@
 import networkx as nx
+import numpy as np
+import numpy.typing as npt
 import pandas as pd
-from logging import info, warning
+import logging
 from typing import Optional
+from pathlib import Path
 
 # Shrink the network by removing everyone who doesn't appear as frequently
 # as this value.
-DEFAULT_N_FREQUENCY = 3
+DEFAULT_N_FREQUENCY: int = 3
 
 
-def shrink_network_by(gamers_df: pd.DataFrame, n_freq: int):
+def shrink_network_by(gamers_df: pd.DataFrame, n_freq: int) -> pd.DataFrame:
     """Remove nodes that appear less than n_freq.
 
     Parameters
     ----------
-    gamers_df : pandas.DataFrame
+    gamers_df: pandas.DataFrame
         Gamers network as a DataFrame.
-    n_freq : int
+    n_freq: int
         Positive integer by which to shrink the network.
 
     Returns
     -------
-    gamers_df : pandas.DataFrame
+    gamers_df: pandas.DataFrame
         Filtered copy of gamers_df.
     """
+    logging.info(f"Shrinking network to authors that appear {n_freq} times.")
     # This could be a one liner, but Python looks a bit messy like that.
     # I'm filtering for authors who appear at least as much as n_freq
     mask: pd.Series = gamers_df.author.value_counts() >= n_freq
-    mask: np.ndarray[str] = gamers_df.author.value_counts()[mask].index
-    return gamers_df.loc[gamers_df.author.isin(mask)]
+    freq_auths: npt.NDArray[np.str_] = gamers_df.author.value_counts()[mask].index
+    return gamers_df.loc[gamers_df.author.isin(freq_auths)]
 
 
-def load_network(path: str, n_freq: int = DEFAULT_N_FREQUENCY):
+def load_network(path: str | Path, n_freq: int = DEFAULT_N_FREQUENCY) -> pd.DataFrame:
     """Loads and processes gamers network from path.
 
     Parameters
     ----------
-    path : str
+    path: str | Path
         Path to network.
-    n_freq : int, optional
+    n_freq: int, optional
         Filter out posters who appear less than n_freq.
         The default is DEFAULT_N_FREQUENCY (3).
 
     Returns
     -------
-    gamers : pandas.DataFrame
+    gamers: pandas.DataFrame
         DataFrame of processed gamers network.
     """
+    logging.info(f"Loading network data from {path}")
     gamers: pd.DataFrame = pd.read_csv(path, engine="pyarrow")
-    gamers: pd.DataFrame = shrink_network_by(gamers, n_freq)
+    gamers = shrink_network_by(gamers, n_freq)
 
     # ======================================
     # Systems, games, and general subreddits
@@ -228,12 +233,12 @@ def load_network(path: str, n_freq: int = DEFAULT_N_FREQUENCY):
     return gamers
 
 
-def load(path: Optional[str]=None):
+def load(path: Optional[str | Path] = None) -> pd.DataFrame:
     """Load gamer network from path if specified or try alternative paths.
 
     Parameters
     ----------
-    path : str, optional
+    path: str | Path, optional
         Path to gamers_reddit_medium_2020.csv.
 
     Returns
@@ -244,11 +249,15 @@ def load(path: Optional[str]=None):
     # Try the data directory if !path
     if not path:
         try:
-            info("Trying to load data from disk")
-            path: Path = Path(__file__).parent.resolve().joinpath("data", "gamers_reddit_medium_2020.csv")
+            logging.info("Trying to load data from disk")
+            path = (
+                Path(__file__)
+                .parent.resolve()
+                .joinpath("data", "gamers_reddit_medium_2020.csv")
+            )
         # Catch FileNotFoundError in order to try GitHub next.
         except FileNotFoundError:
-            warning("Loading data from GitHub")
+            logging.warning("Loading data from GitHub")
             path = "https://github.com/joshuamegnauth54/GamerDistributionThesis2020/raw/master/data/gamers_reddit_medium_2020.csv"
 
     return load_network(path)

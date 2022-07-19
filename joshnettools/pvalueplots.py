@@ -1,34 +1,64 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
+import numpy.typing as npt
 
-from collections.abc import Iterable
+from typing import Optional
+from collections.abc import Sequence, Iterable
+from matplotlib.axes import Subplot
+from matplotlib.figure import Figure
 
 
 def p_value_plots(
-    observed,
-    replicates,
-    labels,
-    plot_obs=True,
-    plot_p=True,
-    figsize=(20, 20),
-    suptitle=None,
-):
+    observed: Sequence[np.floating],
+    replicates: Sequence[npt.NDArray[np.floating]],
+    labels: Sequence[str],
+    plot_obs: bool = True,
+    plot_p: bool = True,
+    figsize: tuple[int, int] = (20, 20),
+    suptitle: Optional[str] = None,
+) -> tuple[Figure, npt.NDArray[Subplot]]:
+    """Plot observed values and replicates for one or more variables.
+
+    Parameters
+    ----------
+    observed: Sequence[np.floating]
+        Observed values.
+    replicates: Sequence[npt.NDArray[np.floating]]
+        Replicates calculated with the parameters that generated `observed`.
+    plot_obs: bool
+        Plot the observed values.
+    plot_p: bool
+        Calculate and plot p-values.
+    figsize: tuple[int, int]
+        Figure size.
+    suptitle: Optional[str]
+        Main title for plot.
+
+    Returns
+    -------
+    tuple[Figure, npt.NDArray[Subplot]]
+        Figure and associated subplots for the p-value plots.
+    """
 
     # Replicates needs to be an array of arrays.
     # Observed and labels must be arrays.
     assert isinstance(observed, Iterable)
     assert isinstance(replicates, Iterable)
-    assert isinstance(replicates[0], Iterable)
-    assert isinstance(labels, Iterable)
-    assert len(observed) > 1
+    assert all(map(lambda rep: isinstance(rep, Iterable), replicates))
+    assert isinstance(labels, Sequence)
+    assert len(observed) & len(replicates) & (len(observed) == len(replicates))
 
     # Equal rows and columns...mostly. We'll have an extra row if the length
     # is odd.
     # My process is really messy.
-    row = int(len(observed) / 2) if ~(len(observed) % 2) else 1 + int(len(observed) / 2)
-    col = int(len(observed) / 2) if len(observed) != 2 else 2
+    row: int = (
+        int(len(observed) / 2) if ~(len(observed) % 2) else 1 + int(len(observed) / 2)
+    )
+    col: int = int(len(observed) / 2) if len(observed) != 2 else 2
 
+    fig: Figure
+    axes: npt.NDArray[Subplot]
     fig, axes = plt.subplots(row, col, figsize=figsize)
     for ax, obs, reps, label in zip(axes.flat, observed, replicates, labels):
         ax.hist(reps, bins="fd", color="#bd93f9")
@@ -43,7 +73,7 @@ def p_value_plots(
             # (which is just the mean as shown below).
             # The replicates were calculated via random graphs
             # so I THINK this is statistically sound.
-            p_value = np.mean(reps >= obs)
+            p_value: np.floating = np.mean(reps >= obs)
 
         # Labels and aesthetics
         ax.set_title(label, fontsize=22, fontweight="bold", color="#f8f8f2")

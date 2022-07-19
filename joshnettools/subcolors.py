@@ -1,5 +1,6 @@
 # Subreddit colors
-from typing import Union, Optional
+from typing import Optional, cast, get_args
+from collections.abc import Collection
 
 # I looked up the hex colors associated with some of these. For example,
 # I gave Goofy's orange to Kingdom Hearts. Other subs were given colors
@@ -81,28 +82,35 @@ __sub_colors: dict[Optional[str], str] = {
     "NonSys": "#f1fa8c",
 }
 
-
 # Yes, this function is misnamed.
-def subreddit_colors(subreddit: Union[set, list, str]) -> str:
-    """Return a color based on an attribute or subreddit.
+def subreddit_colors(subreddit: Collection[str] | Optional[str]) -> str:
+    """Return a hexadecimal color based on an attribute or subreddit.
 
     Parameters
     ----------
-    subreddit: Union[set, list, str]
+    subreddit: Collection[str] | Optional[str]
         A subreddit or list of subreddits.
 
     Returns
     -------
     str
-        Hex color.
+        Hex color for subreddit.
     """
-    if isinstance(subreddit, (set, list)) & len(subreddit):
+    # Check str first because strings are Collections for some reason.
+    if isinstance(subreddit, str):
+        return __sub_colors[subreddit]
+    elif (
+        isinstance(subreddit, Collection)
+        & bool(subreddit)
+        & (str in get_args(subreddit))
+    ):
+        # Subreddit needs to be a Sequence for len() followed by an Iterator
+        # for next()
+        sub_iter = cast(Collection[str], subreddit)
         return (
             __sub_colors["multiple_subs"]
-            if len(subreddit) > 1
-            else __sub_colors[subreddit.pop()]
+            if len(sub_iter) > 1
+            else __sub_colors[next(iter(sub_iter))]
         )
-    elif isinstance(subreddit, str):
-        return __sub_colors[subreddit]
     else:
         return __sub_colors[None]

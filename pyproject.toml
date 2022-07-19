@@ -1,8 +1,8 @@
 [tool.poetry]
-name = "joshthesistools"
-version = "0.9.0"
+name = "joshnettools"
+version = "0.10.0"
 description = "NetworkX wrappers for my social network analysis thesis."
-keywords = ["data science", "networkx", "reddit", "social network"]
+keywords = ["data science", "networkx", "reddit", "social network", "graph"]
 authors = ["Joshua Megnauth <joshua.megnauth@dontemailme.com>"]
 homepage = ""
 license = "GPL-3.0-or-later"
@@ -22,6 +22,10 @@ seaborn = "0.11.2"
 
 [tool.poetry.dev-dependencies]
 black = "22.6.0"
+mypy = "0.961"
+
+[tool.mypy]
+allow_redefinition = true
 
 [build-system]
 requires = ["poetry>=0.12"]

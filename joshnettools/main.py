@@ -1,6 +1,11 @@
 import networkx as nx
 import pandas as pd
+import numpy as np
+import numpy.typing as npt
+from matplotlib.axes import Axes
+from matplotlib.figure import Figure
 from network.classes.graph import Graph
+from typing import Optional
 
 # from matplotlib.patches import Patch
 
@@ -26,57 +31,100 @@ from pvalueplots import p_value_plots
 # gamers_df.groupby("author").subreddit.nunique().sort_values(ascending=False)
 
 
-def deg_cent_metrics(gamers_df: pd.DataFrame, projection: Graph):
-    """Return a sorted degree centrality dict so I don't have to keep typing
-    the line below."""
-    dc = sorted(nx.degree_centrality(projection).items(), key=lambda x: x[1])
+def deg_cent_metrics(
+    gamers_df: pd.DataFrame, projection: Graph
+) -> list[tuple[int, float]]:
+    """Degree centrality sorted in ascending order.
+
+    Parameters
+    ----------
+    gamers_df: pandas.DataFrame
+        Gamers network DataFrame.
+    projection: networkx.Graph
+        Projected gamers network.
+
+    Returns
+    -------
+    list[tuple[int, float]]
+        Sorted degree centralities.
+    """
+    dc: list[tuple[int, float]] = sorted(
+        nx.degree_centrality(projection).items(), key=lambda x: x[1]
+    )
     return dc
 
 
-def sorted_components(projection):
-    """Return the largest connected components in descending order."""
+def sorted_components(projection: Graph) -> list[set[int]]:
+    """Return the largest connected components in descending order.
+
+    Parameters
+    ----------
+    projection: networkx.Graph
+        Projected gamers network.
+
+    Returns
+    -------
+    list[set[int]]
+        Sorted list of connected components.
+    """
     return sorted(nx.connected_components(projection), key=len, reverse=True)
 
 
-def largest_connected_component(projection):
-    """Return LCC of projection."""
-    lcc = nx.subgraph(projection, sorted_components(projection)[0])
+def largest_connected_component(projection: Graph) -> Graph:
+    """Return LCC of projection.
+
+    Parameters
+    ----------
+    projection: networkx.Graph
+        Projected gamers network.
+
+    Returns
+    -------
+    networkx.Graph
+        Largest connected component.
+    """
+    lcc: Graph = nx.subgraph(projection, sorted_components(projection)[0])
     # Note to self: subgraph isn't a copy so this breaks.
     # lcc.name = "LCC of {}".format(projection.name)
     return lcc
 
 
-def test_small(N):
+def test_small(N: int) -> tuple[pd.DataFrame, pd.DataFrame, Graph]:
     """
     Return an N sized DataFrame and projection for testing my code.
 
     Parameters
     ----------
-    N : int
+    N: int
         Size of returned DataFrame.
 
     Returns
     -------
-    (pandas.DataFrame, pandas.DataFrame, networkx.Graph)
+    tuple[pandas.DataFrame, pandas.DataFrame, networkx.Graph]
         Full DataFrame, small DataFrame of size N, and projection of the small
         DataFrame.
     """
-    gamers_full = load()
+    gamers_full: pd.DataFrame = load()
     assert N < len(gamers_full)
-    gamers_small = gamers_full.sample(N)
+    gamers_small: pd.DataFrame = gamers_full.sample(N)
     return (gamers_full, gamers_small, project_auth_tops_bauth(gamers_small))
 
 
 # Lots of duplicated code. Oops. I realized I like how I did it for 790.
 def draw_and_save(
-    projection, gamers_df, path="../../assets/", k_range=range(50, 90, 10)
-):
+    projection: Graph,
+    gamers_df: pd.DataFrame,
+    path: str = "../../assets/",
+    k_range: range = range(50, 90, 10),
+) -> None:
     """Create and save plots used in final paper."""
     print("Drawing graph augmented with degree centrality.")
+    fig: Figure
+    ax: Axes
     fig, ax, _ = draw_degree_centrality(projection, alpha=0.6)
 
     # Add legend and title
-    col_labels = [
+    col_labels: list[tuple[str, str]] = [
         ("#ff79c6", "Systems/consoles"),
         ("#50fa7b", "Games or game series"),
         ("#8be9fd", "Miscellaneous"),
@@ -88,7 +136,7 @@ def draw_and_save(
 
     # K-core decomposition
     print("Calculating largest connected component.")
-    lcc = largest_connected_component(projection)
+    lcc: Graph = largest_connected_component(projection)
     print("Drawing diameter and radius.")
     fig, ax = draw_diameter_radius(lcc, barycenter=False)
     add_network_leg(
@@ -121,29 +169,33 @@ def draw_and_save(
     )
 
     print("Calculating average clustering replicates.")
-    N_reps = 10000
-    processes = 7
+    N_reps: int = 10000
+    processes: int = 7
 
-    clust_obs = nx.average_clustering(projection, weight="weight")
-    clust_reps = dispatcher(
+    clust_obs: np.floating = nx.average_clustering(projection, weight="weight")
+    clust_reps: npt.NDArray[np.floating] = dispatcher(
         gamers_df, random_clust, replicates=N_reps, processes=processes
     )
 
     print("Calculating network density replicates.")
-    dens_obs = nx.density(projection)
-    dens_reps = dispatcher(
+    dens_obs: np.floating = nx.density(projection)
+    dens_reps: npt.NDArray[np.floating] = dispatcher(
         gamers_df, random_density, replicates=N_reps, processes=processes
     )
 
     print("Calculating random degree assortativity replicates.")
-    deg_obs = nx.degree_pearson_correlation_coefficient(projection, weight="weight")
-    deg_reps = dispatcher(
+    deg_obs: np.floating = nx.degree_pearson_correlation_coefficient(
+        projection, weight="weight"
+    )
+    deg_reps: npt.NDArray[np.floating] = dispatcher(
         gamers_df, random_deg_assort, replicates=N_reps, processes=processes
     )
 
     print("Calculating random assortativity replicates.")
-    assort_obs = nx.attribute_assortativity_coefficient(projection, "SysGamGen")
-    assort_reps = dispatcher(
+    assort_obs: np.floating = nx.attribute_assortativity_coefficient(
+        projection, "SysGamGen"
+    )
+    assort_reps: npt.NDArray[np.floating] = dispatcher(
         gamers_df,
         random_assort,
         replicates=N_reps,
@@ -182,7 +234,7 @@ def draw_and_save(
     fig.savefig(path + "metrics_dist_w_obs.png", bbox_inches="tight")
 
     print("Drawing ego graph.")
-    dc = sorted(
+    dc: list[tuple[int, float]] = sorted(
         nx.degree_centrality(projection).items(), key=lambda n: n[1], reverse=True
     )
     fig, ax, _ = draw_degree_centrality(nx.ego_graph(projection, dc[0][0]), alpha=0.6)
@@ -192,15 +244,17 @@ def draw_and_save(
     fig.savefig(path + "ego_graph_dc.png", bbox_inches="tight")
 
 
-def print_useful_metrics(projection, attributes=None):
+def print_useful_metrics(
+    projection: nx.Graph, attributes: Optional[list[str]] = None
+) -> None:
     """Print metrics for projection and LCC, such as radius and diameter."""
     # Using a mutable list is bad default practice, I think.
     if not attributes:
         attributes = ["SysGamGen", "Systems"]
 
-    lcc = largest_connected_component(projection)
+    lcc: nx.Graph = largest_connected_component(projection)
     # Avoid recalculating eccentricity
-    lcc_ecc = nx.eccentricity(lcc)
+    lcc_ecc: dict[int, int] = nx.eccentricity(lcc)
 
     # Standard graph info.
     print("Full:\n{}".format(nx.info(projection)))
