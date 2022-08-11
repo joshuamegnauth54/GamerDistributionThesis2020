@@ -11,7 +11,9 @@ from pathlib import Path
 DEFAULT_N_FREQUENCY: int = 3
 
 
-def shrink_network_by(gamers_df: pd.DataFrame, n_freq: int) -> pd.DataFrame:
+def shrink_network_by(
+    gamers_df: pd.DataFrame, n_freq: int = DEFAULT_N_FREQUENCY
+) -> pd.DataFrame:
     """Remove nodes that appear less than n_freq.
 
     Parameters
@@ -19,7 +21,7 @@ def shrink_network_by(gamers_df: pd.DataFrame, n_freq: int) -> pd.DataFrame:
     gamers_df: pandas.DataFrame
         Gamers network as a DataFrame.
     n_freq: int
-        Positive integer by which to shrink the network.
+        Positive integer by which to shrink the network. Defaults to 3.
 
     Returns
     -------

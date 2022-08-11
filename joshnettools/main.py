@@ -5,11 +5,12 @@ import numpy.typing as npt
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
 from network.classes.graph import Graph
+from logging import info
 from typing import Optional
 
 # from matplotlib.patches import Patch
 
-from gamenetloader import load
+from gamenetloader import load, shrink_network_by
 from projections import project_auth_tops_bauth
 from gamersdraw import (
     draw_degree_centrality,
@@ -308,3 +309,13 @@ def print_useful_metrics(
                 attr, nx.attribute_assortativity_coefficient(lcc, attr)
             )
         )
+
+
+if __name__ == "__main__":
+    info("Running code to produce metrics and plots.")
+    gamers_df: pd.DataFrame = load()
+    gamers_df = shrink_network_by(gamers_df)
+    projection: Graph = project_auth_tops_bauth(gamers_df)
+
+    print_useful_metrics(projection)
+    draw_and_save(projection, gamers_df)
